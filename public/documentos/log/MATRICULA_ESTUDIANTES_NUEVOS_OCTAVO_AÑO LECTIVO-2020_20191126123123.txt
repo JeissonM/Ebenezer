@@ -1,0 +1,14 @@
+*********************************************************************************************************
+PROCESO DE MATRÍCULA MASIVO - MATRÍCULA DE ESTUDIANTES NUEVOS. FECHA: 2019/11/26
+UNIDAD: EBENEZER CENTRAL - JORNADA: CONTÍNUA - PERÍODO: AÑO LECTIVO 2020 - GRADO: OCTAVO
+*********************************************************************************************************
+                                                                        
+                                                                        
+----- MATRICULANDO AL ESTUDIANTE 23456789234  -  JUAN YANETH
+[OK] ESTUDIANTE MATRICULADO CON EXITO EN EL GRUPO OCTAVO A
+*********************************************************************************************************
+                                                                                          
+----- MATRICULANDO AL ESTUDIANTE 9876543  -  ANA YANETH
+[OK] ESTUDIANTE MATRICULADO CON EXITO EN EL GRUPO OCTAVO A
+*********************************************************************************************************
+                                                                                          
