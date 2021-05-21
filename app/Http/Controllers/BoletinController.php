@@ -17,7 +17,8 @@ use App\Resultadoactividad;
 use App\Sistemaevaluacion;
 use App\Unidad;
 use Illuminate\Http\Request;
-use PDF;
+use Illuminate\Support\Facades\Storage;
+use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
 class BoletinController extends Controller
 {
@@ -151,12 +152,13 @@ class BoletinController extends Controller
     public function generaPDF($boletin, $i)
     {
         $hoy = getdate();
-        $fecha = $hoy["year"] . "-" . $hoy["mon"] . "-" . $hoy["mday"] . "  Hora: " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
-        $boletin['hoy'] = $fecha;
+        $fecha = $hoy["year"] . $hoy["mon"] . $hoy["mday"] . $hoy["hours"] . $hoy["minutes"] . $hoy["seconds"];
+        $boletin['hoy'] = $hoy["year"] . "-" . $hoy["mon"] . "-" . $hoy["mday"] . "  Hora: " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];;
         $boletin['puesto'] = $i;
-        $pdf = PDF::loadView('documental.boletines.print', $boletin);
-        $path = url('') . '/documentos/boletines/BOLETIN_' . $boletin['identificacion'] . "_" . $boletin['periodo'] . "_" . $fecha . ".pdf";
-        $pdf->save('documentos/boletines/BOLETIN_' . $boletin['identificacion'] . '_' . $boletin['periodo'] . '_' . $fecha . '.pdf');
+        $pdf = PDF::loadView('documental.boletines.print', $boletin)->output();
+        $path = url('') . '/storage/documentos/boletines/BOLETIN_' . $boletin['identificacion'] . "_" . $boletin['periodo'] . "_" . $fecha . ".pdf";
+        $name="BOLETIN_" . $boletin['identificacion'] . "_" . $boletin['periodo'] . "_".$fecha. ".pdf";
+        Storage::disk('public')->put('documentos/boletines/'.$name, $pdf);
         return $path;
     }
 
