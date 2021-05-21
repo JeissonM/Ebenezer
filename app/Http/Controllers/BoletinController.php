@@ -153,7 +153,7 @@ class BoletinController extends Controller
     {
         $hoy = getdate();
         $fecha = $hoy["year"] . $hoy["mon"] . $hoy["mday"] . $hoy["hours"] . $hoy["minutes"] . $hoy["seconds"];
-        $boletin['hoy'] = $fecha;
+        $boletin['hoy'] = $hoy["year"] . "-" . $hoy["mon"] . "-" . $hoy["mday"] . "  Hora: " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];;
         $boletin['puesto'] = $i;
         $pdf = PDF::loadView('documental.boletines.print', $boletin)->output();
         $path = url('') . '/storage/documentos/boletines/BOLETIN_' . $boletin['identificacion'] . "_" . $boletin['periodo'] . "_" . $fecha . ".pdf";
