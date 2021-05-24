@@ -11,6 +11,8 @@
   |
  */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -38,6 +40,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'menu'], function () {
     Route::get('academico/estudiante', 'MenuController@academico_e_a')->name('menu.academicoestudiante');
     Route::get('academico/acudiente', 'MenuController@academicoacudiente')->name('menu.academicoacudiente');
     Route::get('academico/{estudiante}/menu', 'MenuController@menuacudiente')->name('menu.academicomenuacudiente');
+    Route::get('reportes', 'MenuController@reportes')->name('menu.reportes');
 });
 
 
@@ -555,4 +558,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'documental'], function () {
     //BOLETINES
     Route::resource('boletines', 'BoletinController');
     Route::get('boletines/{grupo}/{periodo}/{evaluacion}/procesar', 'BoletinController@procesar')->name('boletines.procesar');
+});
+
+//REPORTES
+Route::group(['middleware'=> ['auth'],'prefix'=>'reportes'],function(){
+    Route::get('listadogeneraldocentes/imprimir','DocenteController@listadoGeneralDocente')->name('reportes.listadogeneraldocentes');
+    Route::get('cargadocente','ReportesController@ViewCargaDocente')->name('reportes.cargadocente');
+    Route::get('cargadocente/{unidad_id}/{periodoacademico_id}/imprimir/','DocenteController@cargaDocente')->name('reportes.cargadocenteimprimir');
+
+
 });
