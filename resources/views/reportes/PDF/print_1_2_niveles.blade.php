@@ -179,8 +179,12 @@
                     $html = $html . "</table><table style='width: 100%;'>";
                     $parastilo = 0;
                     foreach ($value as $v) {
-                        if(get_class($v) == 'stdClass')
-                            $v = json_decode(json_encode($v), true);
+                        if (get_class($v) == 'stdClass') {
+                            $v = (array)$v;
+                            if (isset($v['docente']))
+                                unset($v['docente']);
+//                            $v = json_decode(json_encode($v), true);
+                        }
 
                         $html = $html . "<tr>";
                         $parastilo = $parastilo + 1;

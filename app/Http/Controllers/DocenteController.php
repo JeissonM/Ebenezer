@@ -293,7 +293,7 @@ class DocenteController extends Controller
                 DB::raw("(SELECT grados.etiqueta FROM grados WHERE grados.id = gradomaterias.grado_id) as grado"),
                 DB::raw("(SELECT grupos.nombre FROM grupos WHERE grupos.id = grupomateriadocentes.grupo_id) as grupo"),
                 DB::raw("CONCAT(personanaturals.primer_nombre,' ',personanaturals.segundo_nombre,' ',personanaturals.primer_apellido,' ',personanaturals.segundo_apellido) as docente"))
-                    ->whereNotNull('grupomateriadocentes.docente_id')->get();
+            ->whereNotNull('grupomateriadocentes.docente_id')->get();
 
         if ($unidad == 0 && $periodo != 0) {
             $query = DB::table('materias')
@@ -306,8 +306,8 @@ class DocenteController extends Controller
                     DB::raw("(SELECT grados.etiqueta FROM grados WHERE grados.id = gradomaterias.grado_id) as grado"),
                     DB::raw("(SELECT grupos.nombre FROM grupos WHERE grupos.id = grupomateriadocentes.grupo_id) as grupo"),
                     DB::raw("CONCAT(personanaturals.primer_nombre,' ',personanaturals.segundo_nombre,' ',personanaturals.primer_apellido,' ',personanaturals.segundo_apellido) as docente"))
-                        ->where('gradomaterias.periodoacademico_id', $periodo)
-                        ->whereNotNull('grupomateriadocentes.docente_id')->get();
+                ->where('gradomaterias.periodoacademico_id', $periodo)
+                ->whereNotNull('grupomateriadocentes.docente_id')->get();
         }
         if ($periodo == 0 && $unidad != 0) {
             $query = DB::table('materias')
@@ -320,8 +320,8 @@ class DocenteController extends Controller
                     DB::raw("(SELECT grados.etiqueta FROM grados WHERE grados.id = gradomaterias.grado_id) as grado"),
                     DB::raw("(SELECT grupos.nombre FROM grupos WHERE grupos.id = grupomateriadocentes.grupo_id) as grupo"),
                     DB::raw("CONCAT(personanaturals.primer_nombre,' ',personanaturals.segundo_nombre,' ',personanaturals.primer_apellido,' ',personanaturals.segundo_apellido) as docente"))
-                        ->where('gradomaterias.unidad_id', $unidad)
-                        ->whereNotNull('grupomateriadocentes.docente_id')->get();
+                ->where('gradomaterias.unidad_id', $unidad)
+                ->whereNotNull('grupomateriadocentes.docente_id')->get();
         }
 
         if ($unidad != 0 && $periodo != 0) {
@@ -338,16 +338,14 @@ class DocenteController extends Controller
                 ->where([['gradomaterias.unidad_id', $unidad], ['gradomaterias.periodoacademico_id', $periodo]])
                 ->whereNotNull('grupomateriadocentes.docente_id')->get();
         }
-        if (count($query) <= 0){
+        if (count($query) <= 0) {
             flash('No hay carga académica para los parametros seleccionados.')->warning();
             return redirect()->back();
         }
-
         $data = $query->groupBy('docente');
         $unidad = $unidad != 0 ? Unidad::findOrFail($unidad)->nombre : 'TODO';
         $periodo = $periodo != 0 ? Periodoacademico::findOrFail($periodo)->etiqueta : 'TODO';
-        $encabezado = null;
-        $cabeceras = ['Codigo', 'Materia', 'Área', 'Grado', 'Grupo', 'Docente'];
+        $cabeceras = ['Codigo', 'Materia', 'Área', 'Grado', 'Grupo'];
         $filtros = ['UNIDAD' => $unidad, 'PERÍODO ACADÉMICO' => $periodo];
         $titulo = "REPORTES DE DOCENTES - CARGA ACADÉMICA DE DOCENTES";
         $nombre = "Carga_académica_docente.pdf";
