@@ -41,10 +41,10 @@
                             <div class="row">
                                 @if(session()->exists('PAG_REPORTES-LISTADO-GENERAL-DOCENTE'))
                                     <div class="col-md-4">
-                                        <a target="_blank"
-                                           href="{{route('reportes.listadogeneraldocentes',$imprimir=true)}}"
-                                           class="btn btn-danger btn-raised btn-block btn-flat"> LISTADO GENERAL DE
-                                            DOCENTES</a>
+                                        <button type="button" class="btn btn-danger btn-raised btn-block btn-flat"
+                                                data-toggle="modal" data-target="#modal"> LISTADO GENERAL DE
+                                            DOCENTES
+                                        </button>
                                     </div>
                                 @endif
                                 @if(session()->exists('PAG_REPORTES-CARGA-ACADEMICA-DOCENTE'))
@@ -67,12 +67,55 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Generar reporte</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Seleccione el formato para el reporte.</p>
+                    <div class="form-check form-check-inline" style="display: inline-block; margin: 1rem">
+                        <input type="radio" class="form-check-input" name="exportar" id="pdf" value="pdf" checked>
+                        <label class="form-check-label" for="pdf">Exportar en PDF</label>
+                    </div>
+                    <div class="form-check form-check-inline" style="display: inline-block; margin: 1rem">
+                        <input type="radio" class="form-check-input" name="exportar" id="excel" value="excel">
+                        <label class="form-check-label" for="excel">Exportar en Excel</label>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: #d2d6de !important; opacity: .65;">
+                    <button type="button" class="btn btn-block btn-danger btn-flat pull-right" data-dismiss="modal"><i
+                            class="fa fa-reply"></i> Cancelar
+                    </button>
+                    <button class="btn btn-block btn-primary btn-flat pull-right" onclick="ir()">
+                        LISTADO GENERAL DE DOCENTES
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
 @endsection
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
             //$('#example1').DataTable();
         });
+
+        function ir() {
+            var exportar = $('input:radio[name=exportar]:checked').val();
+            var imprimir = true;
+            var a = document.createElement("a");
+            a.target = "_blank";
+            a.href = '{{url("reportes/listadogeneraldocentes/imprimir/")}}/' +  imprimir + "/"+ exportar;
+            a.click();
+            // location.href = url + "academico/cargagrados/" + $("#unidad_id").val() + "/" + $("#periodoacademico_id").val() + "/" + $("#jornada_id").val() + "/" + $("#grado_id").val() + "/continuar";
+        }
 
         function unidad() {
             if (confirm('Será redirigido al módulo ADMISIONES en su funcionalidad UNIDADES')) {

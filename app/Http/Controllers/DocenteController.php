@@ -237,7 +237,7 @@ class DocenteController extends Controller
      * @param $periodo
      *
      */
-    public function listadoGeneralDocente($imprimir = true) {
+    public function listadoGeneralDocente($imprimir = true, $exportar = 'pdf') {
         $docentes = Docente::all();
         if (count($docentes) <= 0) {
             flash('No se encontraron docentes')->warning();
@@ -261,9 +261,14 @@ class DocenteController extends Controller
         $cabeceras = ['Identificación', 'Nombre', 'Edad', 'Situación Administrativa'];
         $filtros = [];
         $titulo = "REPORTES DE DOCENTES - LISTADO DE GENERAL DE DOCENTES";
-        $nombre = "Docentes_general.pdf";
         $array = ReportesController::orderMultiDimensionalArray($response, 'nombre', false);
-        return ReportesController::imprimirPdf($array, $cabeceras, $filtros, $titulo, $nombre);
+        if ($exportar == 'pdf') {
+            $nombre = "Docentes_general.pdf";
+            return ReportesController::imprimirPdf($array, $cabeceras, $filtros, $titulo, $nombre);
+        } else {
+            $nombre = "Docentes_general.xlsx";
+            return ReportesController::exportarExcel($array, $cabeceras, $filtros, $titulo, $nombre);
+        }
     }
 
     public function getCargaDocente($unidad, $periodo, $docente_id, $exportar) {

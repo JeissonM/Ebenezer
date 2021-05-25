@@ -63,6 +63,7 @@ class ReportesController extends Controller
     static function exportarExcel($response, $cabeceras, $filtros, $titulo, $nombre, $encabezado = null) {
         $hoy = getdate();
         $fechar = $hoy["year"] . "/" . $hoy["mon"] . "/" . $hoy["mday"] . "  Hora: " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
+//        dd($response);
         return Excel::download(new ExportData($titulo,$cabeceras,$response,$filtros),$nombre);
 //        Excel::create($nombre, function ($excel) use ($response, $cabeceras, $encabezado, $fechar, $filtros,$titulo) {
 //            $excel->sheet('Reporte', function ($sheet) use ($response, $cabeceras, $encabezado, $fechar, $filtros,$titulo) {

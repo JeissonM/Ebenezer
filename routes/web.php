@@ -562,7 +562,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'documental'], function () {
 
 //REPORTES
 Route::group(['middleware'=> ['auth'],'prefix'=>'reportes'],function(){
-    Route::get('listadogeneraldocentes/imprimir/{imprimir}','DocenteController@listadoGeneralDocente')->name('reportes.listadogeneraldocentes');
+    Route::get('listadogeneraldocentes/imprimir/{imprimir?}/{exportar?}','DocenteController@listadoGeneralDocente')->name('reportes.listadogeneraldocentes');
     Route::get('cargadocente','ReportesController@ViewCargaDocente')->name('reportes.cargadocente');
     Route::get('cargadocente/{unidad_id}/{periodoacademico_id}/{exportar}/imprimir/','DocenteController@cargaDocente')->name('reportes.cargadocenteimprimir');
     Route::get('cargadocente/{unidad_id}/{periodoacademico_id}/{docente_id}/{exportar}/imprimir/','DocenteController@getCargaDocente')->name('reportes.getcargadocenteimprimir');

@@ -5,7 +5,7 @@
         <small>Sr(a). {{Auth::user()->nombres}}</small>
     </h1>
     <ol class="breadcrumb">
-        <li><a href="{{route('home')}}"><i class="fa fa-home"></i> Inicio</a></li>
+        <li><a href="{{route('inicio')}}"><i class="fa fa-home"></i> Inicio</a></li>
         <li><a href="{{route('menu.academico')}}"><i class="fa fa-book"></i> Académico</a></li>
         <li><a href="{{route('menu.academico')}}"><i class="fa fa-edit"></i> Registro Académico</a></li>
         <li class="active"><a> Sanciones & Disciplina</a></li>

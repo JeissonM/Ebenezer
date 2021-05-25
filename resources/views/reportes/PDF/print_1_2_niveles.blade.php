@@ -127,7 +127,8 @@
             $html = $html . "</thead><tbody>";
             $parastilo = 0;
             foreach ($data as $value) {
-                if (get_class($value) == 'stdClass') {
+//                dd(gettype($value));
+                if (gettype($value) == 'object') {
                     $value = (array)$value;
                     if (isset($v['docente']))
                         unset($v['docente']);
