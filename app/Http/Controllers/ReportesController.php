@@ -60,27 +60,18 @@ class ReportesController extends Controller
         return $pdf->stream($nombre);
     }
 
-    static function exportarExcel($response, $cabeceras, $filtros, $titulo, $nombre, $encabezado = null) {
+    static function exportarExcel($response, $cabeceras, $filtros, $titulo, $nombre, $encabezado = ['ESP'=>'']) {
         $hoy = getdate();
         $fechar = $hoy["year"] . "/" . $hoy["mon"] . "/" . $hoy["mday"] . "  Hora: " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
-//        dd($response);
-        return Excel::download(new ExportData($titulo,$cabeceras,$response,$filtros),$nombre);
-//        Excel::create($nombre, function ($excel) use ($response, $cabeceras, $encabezado, $fechar, $filtros,$titulo) {
-//            $excel->sheet('Reporte', function ($sheet) use ($response, $cabeceras, $encabezado, $fechar, $filtros,$titulo) {
-//                $sheet->row(1, [$titulo]);
-//                $sheet->row(2, ["FECHA REPORTE: " . $fechar]);
-//                $sheet->row(3, "");
-//                $sheet->row(4, $encabezado);
-//                $sheet->row(5, $filtros);
-//                $sheet->row(6, "");
-//                $sheet->row(7, $cabeceras);
-//                $i = 7;
-//                foreach ($response as $key => $value) {
-//                    $i = $i + 1;
-//                    $sheet->row($i, $this->to_array($value));
-//                }
-//            });
-//        })->download('xlsx')
+        $titulo2 = [[$titulo]];
+        $fecha=[['FECHA'=>'FECHA REPORTE: '.$fechar]];
+        $encabezado=[$encabezado];
+        $filtros=[$filtros];
+        $cabeceras = [$cabeceras];
+        $row=[['ESP'=>'']];
+        $data = array_merge($titulo2,$fecha,$row,$encabezado,$filtros,$row,$cabeceras,$response);
+//        dd($data);
+        return Excel::download(new ExportData($titulo,$cabeceras,$data),$nombre);
     }
 
     /**

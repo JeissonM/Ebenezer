@@ -266,6 +266,7 @@ class DocenteController extends Controller
             $nombre = "Docentes_general.pdf";
             return ReportesController::imprimirPdf($array, $cabeceras, $filtros, $titulo, $nombre);
         } else {
+            $filtros=['ESP'=>''];
             $nombre = "Docentes_general.xlsx";
             return ReportesController::exportarExcel($array, $cabeceras, $filtros, $titulo, $nombre);
         }
@@ -296,11 +297,13 @@ class DocenteController extends Controller
             $cabeceras = ['Codigo', 'Materia', 'Área', 'Grado', 'Grupo'];
             $nombre = "Carga_académica_docente.pdf";
             return ReportesController::imprimirPdf($query, $cabeceras, $filtros, $titulo, $nombre, 1);
-
         } else {
+//            $filtros = ['FILTROS' => 'FILTROS', 'UNIDAD' => 'UNIDAD: ' . $unidad, 'PERÍODO ACADÉMICO' => 'PERÍODO ACADÉMICO: ' . $periodo, 'GRADO' => '', 'GRUPO' => '', 'DOCENTE' => 'DOCENTE: ' . $docente];
+            $filtros = ['FILTROS', 'UNIDAD: ' . $unidad, 'PERÍODO ACADÉMICO: ' . $periodo, 'DOCENTE: ' . $docente];
+            $aux = json_decode(json_encode($query), true);
             $cabeceras = ['Codigo', 'Materia', 'Área', 'Grado', 'Grupo', 'Docente'];
             $nombre = "Carga_académica_deocente_" . $docente . ".xlsx";
-            return ReportesController::exportarExcel($query, $cabeceras, $filtros, $titulo, $nombre);
+            return ReportesController::exportarExcel($aux, $cabeceras, $filtros, $titulo, $nombre);
         }
     }
 
@@ -394,9 +397,11 @@ class DocenteController extends Controller
             $nombre = "Carga_académica_docente.pdf";
             return ReportesController::imprimirPdf($data, $cabeceras, $filtros, $titulo, $nombre, 2);
         } else {
+            $filtros = [ 'FILTROS', 'UNIDAD: ' . $unidad, 'PERÍDO ACADÉMICO: ' . $periodo];
+            $aux = json_decode(json_encode($query), true);
             $cabeceras = ['Codigo', 'Materia', 'Área', 'Grado', 'Grupo', 'Docente'];
             $nombre = "Carga_académica_docente.xlsx";
-            return ReportesController::exportarExcel($query, $cabeceras, $filtros, $titulo, $nombre);
+            return ReportesController::exportarExcel($aux, $cabeceras, $filtros, $titulo, $nombre);
         }
     }
 

@@ -18,7 +18,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Row;
 use Maatwebsite\Excel\Sheet;
 
-class ExportData implements FromCollection, WithHeadings, WithTitle, ShouldAutoSize, WithEvents //, FromArray//, WithMapping //, WithColumnFormatting
+class ExportData implements FromCollection, WithTitle, ShouldAutoSize, WithEvents //, FromArray//, WithMapping //, WithColumnFormatting
 {
 
     use Exportable;
@@ -26,9 +26,8 @@ class ExportData implements FromCollection, WithHeadings, WithTitle, ShouldAutoS
     protected $data;
     protected $name;
     protected $head;
-    protected $filtos;
 
-    public function __construct($name, $head, $data, $filtros) {
+    public function __construct($name, $head, $data) {
         $this->name = $name;
         $this->head = $head;
         if(gettype($data)=='array'){
@@ -36,41 +35,25 @@ class ExportData implements FromCollection, WithHeadings, WithTitle, ShouldAutoS
         }else{
             $this->data = $data;
         }
-
-        $this->filtos = $filtros;
     }
 
 
     public function collection() {
-//       dd('1');
-//        if (gettype($this->data) == 'array'){
-//            $this->data = collect($this->data);
-////            dd($this->data);
-//        }
-
         return $this->data ?: null;
     }
 
-    public function headings(): array {
-        return $this->head;
-    }
+//    public function headings(): array {
+//        return $this->head;
+//    }
 
     public function title(): string {
         return $this->name;
     }
 
-    public function filtros() {
-        return $this->filtos;
-    }
-
     public function registerEvents(): array {
-        $f = $this->filtos;
         return [
-//            AfterSheet::class => function(AfterSheet $event)use($f) {
-//            $event->sheet->appendRows($this,$this->filtos);
-//            },
             AfterSheet::class => function (AfterSheet $event) {
-                $cellRange = 'A1:W1'; // header
+                $cellRange = 'A1:W7'; // header
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
             },
         ];
