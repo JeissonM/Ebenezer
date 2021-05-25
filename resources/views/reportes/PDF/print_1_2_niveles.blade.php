@@ -127,6 +127,12 @@
             $html = $html . "</thead><tbody>";
             $parastilo = 0;
             foreach ($data as $value) {
+                if (get_class($value) == 'stdClass') {
+                    $value = (array)$value;
+                    if (isset($v['docente']))
+                        unset($v['docente']);
+//                            $v = json_decode(json_encode($v), true);
+                }
                 $i2 = $van2 = 0;
                 $parastilo = $parastilo + 1;
                 $total2 = count($value);
@@ -158,7 +164,7 @@
             //nivel 2
             $html = "";
             foreach ($data as $key => $value) {
-                $html = $html . "<table style='width: 100%;'><tr><th style='width: 100% !important; background-color: #ed4c1b; color:#FFFFFF;'>" . $key . "</th></tr></table>";
+                $html = $html . "<table style='width: 100%;'><tr><th style='width: 100% !important; background-color: red; color:#FFFFFF;'>" . $key . "</th></tr></table>";
                 if (count($value) > 0) {
                     $html = $html . "<table style='width: 100%;'><tr>";
                     $i = $total = $van = 0;

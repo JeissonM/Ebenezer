@@ -41,14 +41,17 @@
                             <div class="row">
                                 @if(session()->exists('PAG_REPORTES-LISTADO-GENERAL-DOCENTE'))
                                     <div class="col-md-4">
-                                        <a target="_blank" href="{{route('reportes.listadogeneraldocentes')}}"
-                                           class="btn btn-danger btn-raised btn-block btn-flat"> LISTADO GENERAL DE DOCENTES</a>
+                                        <a target="_blank"
+                                           href="{{route('reportes.listadogeneraldocentes',$imprimir=true)}}"
+                                           class="btn btn-danger btn-raised btn-block btn-flat"> LISTADO GENERAL DE
+                                            DOCENTES</a>
                                     </div>
                                 @endif
                                 @if(session()->exists('PAG_REPORTES-CARGA-ACADEMICA-DOCENTE'))
                                     <div class="col-md-4">
                                         <a href="{{route('reportes.cargadocente')}}"
-                                           class="btn btn-danger btn-raised btn-block btn-flat"> CARGA ACADÉMICA DE UN DOCENTE</a>
+                                           class="btn btn-danger btn-raised btn-block btn-flat"> CARGA ACADÉMICA DE UN
+                                            DOCENTE</a>
                                     </div>
                                 @endif
                             </div>

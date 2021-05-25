@@ -237,7 +237,7 @@ class DocenteController extends Controller
      * @param $periodo
      *
      */
-    public function listadoGeneralDocente() {
+    public function listadoGeneralDocente($imprimir = true) {
         $docentes = Docente::all();
         if (count($docentes) <= 0) {
             flash('No se encontraron docentes')->warning();
@@ -245,7 +245,7 @@ class DocenteController extends Controller
         }
         $response = [];
         foreach ($docentes as $doc) {
-            $persona = $this->llenarDocente($doc->id);
+            $persona = $this->llenarDocente($doc->id, $imprimir);
             $response[] = $persona;
         }
         if (count($response) <= 0) {
@@ -253,13 +253,50 @@ class DocenteController extends Controller
             return redirect()->back();
         }
 
-        $encabezado = null;
+        if ($imprimir == 'false') {
+            $docs = ReportesController::orderMultiDimensionalArray($response, 'nombre');
+            return $docs != null ? json_encode($docs) : "null";
+        }
+
         $cabeceras = ['Identificación', 'Nombre', 'Edad', 'Situación Administrativa'];
         $filtros = [];
         $titulo = "REPORTES DE DOCENTES - LISTADO DE GENERAL DE DOCENTES";
         $nombre = "Docentes_general.pdf";
         $array = ReportesController::orderMultiDimensionalArray($response, 'nombre', false);
         return ReportesController::imprimirPdf($array, $cabeceras, $filtros, $titulo, $nombre);
+    }
+
+    public function getCargaDocente($unidad, $periodo, $docente_id, $exportar) {
+        $query = DB::table('materias')
+            ->join('gradomaterias', 'gradomaterias.materia_id', '=', 'materias.id')
+            ->join('grupomateriadocentes', 'grupomateriadocentes.gradomateria_id', '=', 'gradomaterias.id')
+            ->join('docentes', 'docentes.id', '=', 'grupomateriadocentes.docente_id')
+            ->join('personanaturals', 'personanaturals.id', '=', 'docentes.personanatural_id')
+            ->select('materias.codigomateria as codigo', 'materias.nombre as materia',
+                DB::raw("(SELECT areas.nombre FROM areas WHERE areas.id = materias.area_id) as area"),
+                DB::raw("(SELECT grados.etiqueta FROM grados WHERE grados.id = gradomaterias.grado_id) as grado"),
+                DB::raw("(SELECT grupos.nombre FROM grupos WHERE grupos.id = grupomateriadocentes.grupo_id) as grupo"))
+            ->where([['gradomaterias.unidad_id', $unidad], ['gradomaterias.periodoacademico_id', $periodo], ['grupomateriadocentes.docente_id', $docente_id]])->orderBy('materia')->get();
+        if (count($query) <= 0) {
+            flash('No hay carga académica para los parametros seleccionados.')->warning();
+            return redirect()->back();
+        }
+        $unidad = $unidad != 0 ? Unidad::findOrFail($unidad)->nombre : 'TODO';
+        $periodo = $periodo != 0 ? Periodoacademico::findOrFail($periodo)->etiqueta : 'TODO';
+        $doc = Docente::findOrFail($docente_id);
+        $docente = $doc->personanatural->primer_nombre . " " . $doc->personanatural->segundo_nombre . " " . $doc->personanatural->primer_apellido . " " . $doc->personanatural->segundo_apellido;
+        $filtros = ['UNIDAD' => $unidad, 'PERÍODO ACADÉMICO' => $periodo, 'DOCENTE' => $docente];
+        $titulo = "REPORTES DE DOCENTES - CARGA ACADÉMICA DE DOCENTES";
+        if ($exportar == 'pdf') {
+            $cabeceras = ['Codigo', 'Materia', 'Área', 'Grado', 'Grupo'];
+            $nombre = "Carga_académica_docente.pdf";
+            return ReportesController::imprimirPdf($query, $cabeceras, $filtros, $titulo, $nombre, 1);
+
+        } else {
+            $cabeceras = ['Codigo', 'Materia', 'Área', 'Grado', 'Grupo', 'Docente'];
+            $nombre = "Carga_académica_deocente_" . $docente . ".xlsx";
+            return ReportesController::exportarExcel($query, $cabeceras, $filtros, $titulo, $nombre);
+        }
     }
 
     /**
@@ -282,7 +319,7 @@ class DocenteController extends Controller
      * INNER JOIN personanaturals ON personanaturals.id = docentes.personanatural_id
      * WHERE gradomaterias.unidad_id = 1 AND gradomaterias.periodoacademico_id = 3 AND grupomateriadocentes.docente_id IS NOT NULL
      */
-    public function cargaDocente($unidad, $periodo) {
+    public function cargaDocente($unidad, $periodo, $exportar) {
         $query = DB::table('materias')
             ->join('gradomaterias', 'gradomaterias.materia_id', '=', 'materias.id')
             ->join('grupomateriadocentes', 'grupomateriadocentes.gradomateria_id', '=', 'gradomaterias.id')
@@ -293,7 +330,7 @@ class DocenteController extends Controller
                 DB::raw("(SELECT grados.etiqueta FROM grados WHERE grados.id = gradomaterias.grado_id) as grado"),
                 DB::raw("(SELECT grupos.nombre FROM grupos WHERE grupos.id = grupomateriadocentes.grupo_id) as grupo"),
                 DB::raw("CONCAT(personanaturals.primer_nombre,' ',personanaturals.segundo_nombre,' ',personanaturals.primer_apellido,' ',personanaturals.segundo_apellido) as docente"))
-            ->whereNotNull('grupomateriadocentes.docente_id')->get();
+            ->whereNotNull('grupomateriadocentes.docente_id')->orderBy('docente')->get();
 
         if ($unidad == 0 && $periodo != 0) {
             $query = DB::table('materias')
@@ -307,7 +344,7 @@ class DocenteController extends Controller
                     DB::raw("(SELECT grupos.nombre FROM grupos WHERE grupos.id = grupomateriadocentes.grupo_id) as grupo"),
                     DB::raw("CONCAT(personanaturals.primer_nombre,' ',personanaturals.segundo_nombre,' ',personanaturals.primer_apellido,' ',personanaturals.segundo_apellido) as docente"))
                 ->where('gradomaterias.periodoacademico_id', $periodo)
-                ->whereNotNull('grupomateriadocentes.docente_id')->get();
+                ->whereNotNull('grupomateriadocentes.docente_id')->orderBy('docente')->get();
         }
         if ($periodo == 0 && $unidad != 0) {
             $query = DB::table('materias')
@@ -321,7 +358,7 @@ class DocenteController extends Controller
                     DB::raw("(SELECT grupos.nombre FROM grupos WHERE grupos.id = grupomateriadocentes.grupo_id) as grupo"),
                     DB::raw("CONCAT(personanaturals.primer_nombre,' ',personanaturals.segundo_nombre,' ',personanaturals.primer_apellido,' ',personanaturals.segundo_apellido) as docente"))
                 ->where('gradomaterias.unidad_id', $unidad)
-                ->whereNotNull('grupomateriadocentes.docente_id')->get();
+                ->whereNotNull('grupomateriadocentes.docente_id')->orderBy('docente')->get();
         }
 
         if ($unidad != 0 && $periodo != 0) {
@@ -336,25 +373,33 @@ class DocenteController extends Controller
                     DB::raw("(SELECT grupos.nombre FROM grupos WHERE grupos.id = grupomateriadocentes.grupo_id) as grupo"),
                     DB::raw("CONCAT(personanaturals.primer_nombre,' ',personanaturals.segundo_nombre,' ',personanaturals.primer_apellido,' ',personanaturals.segundo_apellido) as docente"))
                 ->where([['gradomaterias.unidad_id', $unidad], ['gradomaterias.periodoacademico_id', $periodo]])
-                ->whereNotNull('grupomateriadocentes.docente_id')->get();
+                ->whereNotNull('grupomateriadocentes.docente_id')->orderBy('docente')->get();
         }
         if (count($query) <= 0) {
             flash('No hay carga académica para los parametros seleccionados.')->warning();
             return redirect()->back();
         }
-        $data = $query->groupBy('docente');
         $unidad = $unidad != 0 ? Unidad::findOrFail($unidad)->nombre : 'TODO';
         $periodo = $periodo != 0 ? Periodoacademico::findOrFail($periodo)->etiqueta : 'TODO';
-        $cabeceras = ['Codigo', 'Materia', 'Área', 'Grado', 'Grupo'];
         $filtros = ['UNIDAD' => $unidad, 'PERÍODO ACADÉMICO' => $periodo];
         $titulo = "REPORTES DE DOCENTES - CARGA ACADÉMICA DE DOCENTES";
-        $nombre = "Carga_académica_docente.pdf";
-        return ReportesController::imprimirPdf($data, $cabeceras, $filtros, $titulo, $nombre, 2);
+        if ($exportar == 'pdf') {
+            $data = $query->groupBy('docente');
+            $cabeceras = ['Codigo', 'Materia', 'Área', 'Grado', 'Grupo'];
+            $nombre = "Carga_académica_docente.pdf";
+            return ReportesController::imprimirPdf($data, $cabeceras, $filtros, $titulo, $nombre, 2);
+        } else {
+            $cabeceras = ['Codigo', 'Materia', 'Área', 'Grado', 'Grupo', 'Docente'];
+            $nombre = "Carga_académica_docente.xlsx";
+            return ReportesController::exportarExcel($query, $cabeceras, $filtros, $titulo, $nombre);
+        }
     }
 
-    public function llenarDocente($doc, $obj = false) {
+    public function llenarDocente($doc, $imprimir = false, $obj = false) {
         if (!$obj)
             $doc = Docente::findOrFail($doc);
+        if ($imprimir == 'false')
+            $data['id'] = $doc->id;
         $data['identificacion'] = $doc->personanatural->persona->tipodoc->abreviatura . '-' . $doc->personanatural->persona->numero_documento;
         $data['nombre'] = $doc->personanatural->primer_nombre . " " . $doc->personanatural->segundo_nombre . " " . $doc->personanatural->primer_apellido . " " . $doc->personanatural->segundo_apellido;
         $data['edad'] = $doc->personanatural->edad;

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Export\ExportData;
 use App\Periodoacademico;
 use App\Unidad;
+use Maatwebsite\Excel\Facades\Excel;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
 use Illuminate\Http\Request;
 
 class ReportesController extends Controller
 {
-    public function ViewCargaDocente()
-    {
+    public function ViewCargaDocente() {
         $periodos = $unidades = null;
         $perds = Periodoacademico::all()->sortByDesc('anio');
         if (count($perds) > 0) {
@@ -45,8 +46,7 @@ class ReportesController extends Controller
      * @param null $encabezado
      * @return mixed
      */
-    static function imprimirPdf($response, $cabeceras, $filtros, $titulo, $nombre,$nivel = 1, $encabezado = null)
-    {
+    static function imprimirPdf($response, $cabeceras, $filtros, $titulo, $nombre, $nivel = 1, $encabezado = null) {
         $hoy = getdate();
         $fechar = $hoy["year"] . "/" . $hoy["mon"] . "/" . $hoy["mday"] . "  Hora: " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
         $date['fecha'] = $fechar;
@@ -60,14 +60,35 @@ class ReportesController extends Controller
         return $pdf->stream($nombre);
     }
 
+    static function exportarExcel($response, $cabeceras, $filtros, $titulo, $nombre, $encabezado = null) {
+        $hoy = getdate();
+        $fechar = $hoy["year"] . "/" . $hoy["mon"] . "/" . $hoy["mday"] . "  Hora: " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
+        return Excel::download(new ExportData($titulo,$cabeceras,$response,$filtros),$nombre);
+//        Excel::create($nombre, function ($excel) use ($response, $cabeceras, $encabezado, $fechar, $filtros,$titulo) {
+//            $excel->sheet('Reporte', function ($sheet) use ($response, $cabeceras, $encabezado, $fechar, $filtros,$titulo) {
+//                $sheet->row(1, [$titulo]);
+//                $sheet->row(2, ["FECHA REPORTE: " . $fechar]);
+//                $sheet->row(3, "");
+//                $sheet->row(4, $encabezado);
+//                $sheet->row(5, $filtros);
+//                $sheet->row(6, "");
+//                $sheet->row(7, $cabeceras);
+//                $i = 7;
+//                foreach ($response as $key => $value) {
+//                    $i = $i + 1;
+//                    $sheet->row($i, $this->to_array($value));
+//                }
+//            });
+//        })->download('xlsx')
+    }
+
     /**
      * @param $toOrderArray
      * @param $field
      * @param false $inverse
      * @return array
      */
-    static function orderMultiDimensionalArray($toOrderArray, $field, bool $inverse = false): array
-    {
+    static function orderMultiDimensionalArray($toOrderArray, $field, bool $inverse = false): array {
         $position = array();
         $newRow = array();
         foreach ($toOrderArray as $key => $row) {

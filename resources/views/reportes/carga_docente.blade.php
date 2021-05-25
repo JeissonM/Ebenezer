@@ -31,7 +31,6 @@
                     <div class="form-group">
                         <label>Unidad Académica o Sede</label>
                         <select class="form-control" id="unidad_id">
-                            <option value="">--Seleccione una opción--</option>
                             <option value="0">TODO</option>
                             @foreach($unidades as $key=>$value)
                                 <option value="{{$key}}">{{$value}}</option>
@@ -42,14 +41,23 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Período Académico</label>
-                        <select class="form-control" id="periodoacademico_id">
-                            <option value="">--Seleccione una opción--</option>
+                        <select class="form-control" id="periodoacademico_id" onchange="getDocentes()">
                             <option value="0">TODO</option>
                             @foreach($periodos as $key=>$value)
                                 <option value="{{$key}}">{{$value}}</option>
                             @endforeach
                         </select>
                     </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-check form-check-inline" style="display: inline-block; margin: 1rem">
+                    <input type="radio" class="form-check-input" name="exportar" id="pdf" value="pdf" checked>
+                    <label class="form-check-label" for="pdf">Exportar en PDF</label>
+                </div>
+                <div class="form-check form-check-inline" style="display: inline-block; margin: 1rem">
+                    <input type="radio" class="form-check-input" name="exportar" id="excel" value="excel">
+                    <label class="form-check-label" for="excel">Exportar en Excel</label>
                 </div>
             </div>
             <div class="col-md-12" style="margin-top: 20px !important">
@@ -59,6 +67,12 @@
                     </button>
                     <a class="btn btn-primary icon-btn pull-left" href="{{route('menu.reportes')}}"><i
                             class="fa fa-fw fa-lg fa-times-circle"></i>Cancelar</a>
+                </div>
+            </div>
+            <div class="col-md-12" style="margin-top: 50px">
+                <h3>Listado de Docentes</h3>
+                <div class="table-responsive" id="docentes">
+
                 </div>
             </div>
         </div>
@@ -73,7 +87,7 @@
                 </div>
                 <div class="modal-body">
                     <p>Esta funcionalidad permite al usuario consultar el listado general de los docentes por una unidad
-                        y período seleccionado.</a>
+                        y período seleccionado.</p>
                 </div>
                 <div class="modal-footer" style="background-color: #d2d6de !important; opacity: .65;">
                     <button type="button" class="btn btn-block btn-danger btn-flat pull-right" data-dismiss="modal"><i
@@ -90,15 +104,48 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#example1').DataTable();
+            // $('#example1').DataTable();
         });
 
+        var exportar=$('input:radio[name=exportar]:checked').val();
+        $('input:radio[name=exportar]').click(function (){
+            exportar = $('input:radio[name=exportar]:checked').val();
+            getDocentes();
+        });
+        function getDocentes() {
+            // var exportar = $('input:radio[name=exportar]:checked').val();
+            var unidad = $("#unidad_id").val();
+            var periodo = $("#periodoacademico_id").val();
+            var imprimir = false;
+            $.ajax({
+                type: 'GET',
+                url: '{{url("reportes/listadogeneraldocentes/imprimir")}}/' + imprimir,
+                data: {},
+            }).done(function (msg) {
+                $("#docentes").html("");
+                if (msg !== "null") {
+                    var m = JSON.parse(msg);
+                    var html = "<table id='tbmatriculados' class='table table-bordered table-striped table-hover'>" +
+                        "<thead><tr class='bg-purple'><th>IDENTIFICACIÓN</th><th>NOMBRE</th><th>SITUACIÓN</th><th>CONTINUAR</th></tr></thead><tbody>";
+                    $.each(m, function (index, item) {
+                        html = html + "<tr><td>" + item.identificacion + "</td><td>" + item.nombre + "</td><td>" + item.situacion + "</td><th style='text-align:center'><a data-toggle='tooltip' title='Cosultar' target='_blank' href='" + '{{url("reportes/cargadocente/")}}/' + unidad + "/" + periodo + "/" + item.id +"/"+ exportar +"/imprimir" + "'><i class='fa fa-print'></i></a></th></tr>";
+                    });
+                    html = html + "</tbody></table>";
+                    $("#docentes").html(html);
+                } else {
+                    notify('Atención', 'Para los parametros seleccionados no hay docentes.', 'warning');
+                }
+            });
+        }
+
+
         function ir() {
+            // var exportar = $('input:radio[name=exportar]:checked').val();
             var unidad = $("#unidad_id").val();
             var periodo = $("#periodoacademico_id").val();
             var a = document.createElement("a");
             a.target = "_blank";
-            a.href = '{{url("reportes/cargadocente/")}}/' + unidad + "/" + periodo + "/imprimir";
+            a.href = '{{url("reportes/cargadocente/")}}/' + unidad + "/" + periodo + "/"+ exportar +"/imprimir";
             a.click();
             // location.href = url + "academico/cargagrados/" + $("#unidad_id").val() + "/" + $("#periodoacademico_id").val() + "/" + $("#jornada_id").val() + "/" + $("#grado_id").val() + "/continuar";
         }
