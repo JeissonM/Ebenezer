@@ -54,6 +54,19 @@
                                             DOCENTE</a>
                                     </div>
                                 @endif
+                                @if(session()->exists('PAG_REPORTES-LISTADO-GENERAL-ESTUDIANTE'))
+                                    <div class="col-md-4">
+                                        <a href="{{route('reportes.listadoestudiante')}}"
+                                           class="btn btn-danger btn-raised btn-block btn-flat">LISTADO GENERAL DE
+                                            ESTUDIANTES</a>
+                                    </div>
+                                @endif
+                                @if(session()->exists('PAG_REPORTES-LISTADO-GENERAL-ESTUDIANTE'))
+                                    <div class="col-md-4">
+                                        <a href="{{route('reportes.horariogrupo')}}"
+                                           class="btn btn-danger btn-raised btn-block btn-flat">HORARIO DE UN GRUPO</a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div class="tab-pane" id="tab_2">
@@ -112,27 +125,9 @@
             var imprimir = true;
             var a = document.createElement("a");
             a.target = "_blank";
-            a.href = '{{url("reportes/listadogeneraldocentes/imprimir/")}}/' +  imprimir + "/"+ exportar;
+            a.href = '{{url("reportes/listadogeneraldocentes/imprimir/")}}/' + imprimir + "/" + exportar;
             a.click();
             // location.href = url + "academico/cargagrados/" + $("#unidad_id").val() + "/" + $("#periodoacademico_id").val() + "/" + $("#jornada_id").val() + "/" + $("#grado_id").val() + "/continuar";
-        }
-
-        function unidad() {
-            if (confirm('Será redirigido al módulo ADMISIONES en su funcionalidad UNIDADES')) {
-                location.href = url + "admisiones/unidad";
-            }
-        }
-
-        function periodo() {
-            if (confirm('Será redirigido al módulo ADMISIONES en su funcionalidad PERÍODO ACADÉMICO')) {
-                location.href = url + "admisiones/periodoacademico";
-            }
-        }
-
-        function programar() {
-            if (confirm('Será redirigido al módulo ADMISIONES en su funcionalidad PROGRAMAR PERÍODO')) {
-                location.href = url + "admisiones/periodounidad";
-            }
         }
     </script>
 @endsection
