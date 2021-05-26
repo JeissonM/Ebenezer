@@ -90,7 +90,53 @@ class EstudianteController extends Controller
             $nombre = "Listado_general_estudiantes.xlsx";
             return ReportesController::exportarExcel($data, $cabeceras, $filtros, $titulo, $nombre);
         }
+    }
 
+    /**
+     * @param $unidad
+     * @param $periodo
+     * @param $estado
+     * @param $exportar
+     * devuelve el listado de estudiantes por un estado
+     */
+    public function estudiantesMatriculados($unidad, $periodo, $estado, $exportar) {
+        if ($estado == 'MATRICULADO') {
+            $estudiante = Estudiante::where([['unidad_id', $unidad], ['periodoacademico_id', $periodo], ['estado', $estado], ['pago', 'PAGADO']])->get();
+        } else {
+            $estudiante = Estudiante::where([['unidad_id', $unidad], ['periodoacademico_id', $periodo], ['estado', $estado]])->get();
+        }
+        if (count($estudiante) <= 0) {
+            flash('No hay resultados para los parametros seleccionados.')->warning();
+            return redirect()->back();
+        }
+        $response = [];
+        foreach ($estudiante as $item) {
+            $persona = $this->llenarEstudiante($item);
+            $persona['estado'] = $item->estado;
+            $persona['pago'] = $item->pago;
+            $response[] = $persona;
+        }
+        if (count($response) <= 0) {
+            flash('No hay estudiantes para los parametros seleccionados.')->warning();
+            return redirect()->back();
+        }
+        $unidad = Unidad::findOrFail($unidad)->nombre;
+        $periodo = Periodoacademico::findOrFail($periodo)->etiqueta;
+        $filtros = ['UNIDAD' => $unidad, 'PERÍODO ACADÉMICO' => $periodo, 'ESTADO' => $estado];
+        $titulo = "REPORTES DE ESTUDIANTES - LISTADO DE ESTUDIANTES " . $estado;
+        $data = ReportesController::orderMultiDimensionalArray($response, 'nombre');
+        $cabeceras = ['Identificación', 'Nombre', 'Grado', 'Situación', 'Categoría', 'Estado', 'Pago'];
+        $encabezado = ['TOTAL ESTUDIANTES' => count($response)];
+        if ($exportar == 'pdf') {
+            $nombre = "Listao_estudiante_estado.pdf";
+            return ReportesController::imprimirPdf($data, $cabeceras, $filtros, $titulo, $nombre, 1, $encabezado);
+        } else {
+            $filtros = ['FILTROS', 'UNIDAD: ' . $unidad, 'PERÍDO ACADÉMICO: ' . $periodo, 'ESTADO: ' . $estado];
+            $encabezado = ['TOTAL ESTUDIANTES: ' . count($response)];
+//            $aux = json_decode(json_encode($query), true);
+            $nombre = "Listado_estudiantes_estado.xlsx";
+            return ReportesController::exportarExcel($data, $cabeceras, $filtros, $titulo, $nombre, $encabezado);
+        }
     }
 
     private function llenarEstudiante($estudiante) {

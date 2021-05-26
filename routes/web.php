@@ -573,4 +573,5 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'reportes'], function () {
     Route::get('estudiantesinscritos', 'ReportesController@viewEstudiantesInscritos')->name('reportes.estudiantesinscritos');
     Route::get('estudiantesinscritos/{unidad}/{periodo}/{estado}/{exportar}/imprimir', 'AspiranteController@estudiantesInscritos')->name('reportes.estudiantesinscritosinmprimir');
     Route::get('estudiantesmatriculados', 'ReportesController@viewEstudiantesMatriculados')->name('reportes.estudiantesmatriculados');
+    Route::get('estudiantesmatriculados/estados/{unidad}/{periodo}/{estado}/{exportar}/imprimir', 'EstudianteController@estudiantesMatriculados')->name('reportes.estudiantesmatriculadosinmprimir');
 });
