@@ -61,12 +61,24 @@
                                             ESTUDIANTES</a>
                                     </div>
                                 @endif
-                                @if(session()->exists('PAG_REPORTES-LISTADO-GENERAL-ESTUDIANTE'))
+                                @if(session()->exists('PAG_REPORTES-HORARIO-GRUPO'))
                                     <div class="col-md-4">
                                         <a href="{{route('reportes.horariogrupo')}}"
                                            class="btn btn-danger btn-raised btn-block btn-flat">HORARIO DE UN GRUPO</a>
                                     </div>
                                 @endif
+                                    @if(session()->exists('PAG_REPORTES-ESTUDIANTES-INSCRITOS'))
+                                        <div class="col-md-4">
+                                            <a href="{{route('reportes.estudiantesinscritos')}}"
+                                               class="btn btn-danger btn-raised btn-block btn-flat">ESTUDIANTES INSCRITOS</a>
+                                        </div>
+                                    @endif
+                                    @if(session()->exists('PAG_REPORTES-ESTUDIANTES-MATRICULADOS'))
+                                        <div class="col-md-4">
+                                            <a href="{{route('reportes.estudiantesmatriculados')}}"
+                                               class="btn btn-danger btn-raised btn-block btn-flat">ESTUDIANTE MATRICULADOS</a>
+                                        </div>
+                                    @endif
                             </div>
                         </div>
                         <div class="tab-pane" id="tab_2">

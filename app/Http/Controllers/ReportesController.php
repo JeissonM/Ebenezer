@@ -70,6 +70,32 @@ class ReportesController extends Controller
             ->with('categorias', $categorias);
     }
 
+    public function viewEstudiantesInscritos() {
+        $periodos = $unidades = null;
+        $perds = Periodoacademico::all()->sortByDesc('anio');
+        if (count($perds) > 0) {
+            foreach ($perds as $p) {
+                $periodos[$p->id] = $p->etiqueta . " - " . $p->anio;
+            }
+        } else {
+            flash("No hay períodos académicos")->error();
+            return redirect()->route('menu.reportes');
+        }
+        $unds = Unidad::all();
+        if (count($unds) > 0) {
+            foreach ($unds as $u) {
+                $unidades[$u->id] = $u->nombre . " - " . $u->descripcion . " - " . $u->ciudad->nombre;
+            }
+        } else {
+            flash("No hay unidades o sedes definidas")->error();
+            return redirect()->route('menu.reportes');
+        }
+        return view('reportes.estudiantes_inscritos')
+            ->with('location', 'reportes')
+            ->with('unidades', $unidades)
+            ->with('periodos', $periodos);
+    }
+
     public function viewHorarioGrupo() {
         $periodos = $unidades = $jornadas = null;
         $perds = Periodoacademico::all()->sortByDesc('anio');

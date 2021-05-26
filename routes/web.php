@@ -570,4 +570,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'reportes'], function () {
     Route::get('listadogeneralestudiantes/{unidad_id}/{periodoacademico_id}/{situacion}/{categoria}/{exportar}/imprimir/', 'EstudianteController@listadoEstudiante')->name('reportes.listadoestudianteimprimir');
     Route::get('horariogrupo', 'ReportesController@viewHorarioGrupo')->name('reportes.horariogrupo');
     Route::get('horariogrupo/{unidad}/{periodo}/{grado}/{grupo}/consultar', 'HorarioController@horarioGrupoConsultar')->name('reportes.horariogrupoconsultr');
+    Route::get('estudiantesinscritos', 'ReportesController@viewEstudiantesInscritos')->name('reportes.estudiantesinscritos');
+    Route::get('estudiantesinscritos/{unidad}/{periodo}/{estado}/{exportar}/imprimir', 'AspiranteController@estudiantesInscritos')->name('reportes.estudiantesinscritosinmprimir');
+    Route::get('estudiantesmatriculados', 'ReportesController@viewEstudiantesMatriculados')->name('reportes.estudiantesmatriculados');
 });
