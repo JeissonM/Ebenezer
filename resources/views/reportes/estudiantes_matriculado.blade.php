@@ -7,13 +7,21 @@
     <ol class="breadcrumb">
         <li><a href="{{route('inicio')}}"><i class="fa fa-home"></i> Inicio</a></li>
         <li><a href="{{route('menu.reportes')}}"><i class="fa fa-book"></i> Reportes</a></li>
-        <lAi class="active"><a>Listado de Estudiantes Matriculados</a></li>
+        @if($bool)
+            <li class="active"><a>Listado de Estudiantes por Estado</a></li>
+        @else
+            <li class="active"><a>Listado de Estudiantes Matriculados</a></li>
+        @endif
     </ol>
 @endsection
 @section('content')
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title">LISTADO DE ESTUADIANTES MATRUCULADOS</h3>
+            @if($bool)
+                <h3 class="box-title">LISTADO DE ESTUADIANTES POR ESTADO</h3>
+            @else
+                <h3 class="box-title">LISTADO DE ESTUADIANTES MATRUCULADOS</h3>
+            @endif
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#modal" title="Ayuda">
                     <i class="fa fa-question"></i></button>
@@ -52,13 +60,21 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Estado</label>
-                        <select class="form-control" id="estado">
-                            <option value="MATRICULADO">MATRICULADO</option>
-                            <option value="NUEVO">NUEVO</option>
-                            <option value="REPROBADO">REPROBADO</option>
-                            <option value="APROBADO">APROBADO</option>
-                            <option value="NIVELACION">NIVELACIÓN</option>
-                        </select>
+                        @if($bool)
+                            <select class="form-control" id="estado">
+                                <option value="REPROBADO">REPROBADO</option>
+                                <option value="APROBADO">APROBADO</option>
+                                <option value="NIVELACION">NIVELACIÓN</option>
+                            </select>
+                        @else
+                            <select class="form-control" id="estado">
+                                <option value="MATRICULADO">MATRICULADO</option>
+                                <option value="NUEVO">NUEVO</option>
+                                <option value="REPROBADO">REPROBADO</option>
+                                <option value="APROBADO">APROBADO</option>
+                                <option value="NIVELACION">NIVELACIÓN</option>
+                            </select>
+                        @endif
                     </div>
                 </div>
                 <div class="col-md-6" style="margin-top: 25px;">

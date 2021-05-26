@@ -132,7 +132,7 @@ class ReportesController extends Controller
             ->with('jornadas', $jornadas);
     }
 
-    public function viewEstudiantesMatriculados(){
+    public function viewEstudiantesMatriculados($bool = false) {
         $periodos = $unidades = null;
         $perds = Periodoacademico::all()->sortByDesc('anio');
         if (count($perds) > 0) {
@@ -155,8 +155,10 @@ class ReportesController extends Controller
         return view('reportes.estudiantes_matriculado')
             ->with('location', 'reportes')
             ->with('unidades', $unidades)
-            ->with('periodos', $periodos);
+            ->with('periodos', $periodos)
+            ->with('bool', $bool);
     }
+
     /**
      * @param $response
      * @param $cabeceras

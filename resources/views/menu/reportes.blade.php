@@ -79,6 +79,12 @@
                                                class="btn btn-danger btn-raised btn-block btn-flat">ESTUDIANTE MATRICULADOS</a>
                                         </div>
                                     @endif
+                                    @if(session()->exists('PAG_REPORTES-ESTUDIANTES-ESTADO'))
+                                        <div class="col-md-4">
+                                            <a href="{{route('reportes.estudiantesmatriculados',[true])}}"
+                                               class="btn btn-danger btn-raised btn-block btn-flat">ESTUDIANTE POR ESTADO</a>
+                                        </div>
+                                    @endif
                             </div>
                         </div>
                         <div class="tab-pane" id="tab_2">
