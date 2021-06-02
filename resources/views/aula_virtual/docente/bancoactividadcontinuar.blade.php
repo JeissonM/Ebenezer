@@ -72,6 +72,8 @@
                              <th>DESCRIPCIÓN</th>
                              <th>TIPO</th>
                              <th>EVALUACIÓN ACADÉMICA</th>
+                             <th>UNIDAD</th>
+                             <th>TEMA</th>
                              <th>AUTOR</th>
                          </tr>
                      </thead>
@@ -81,6 +83,8 @@
                              <td>{{$a->descripcion}}</td>
                              <td>{{$a->tipo}}</td>
                              <td>{{$a->evaluacionacademica->nombre." (".$a->evaluacionacademica->peso."%)"}}</td>
+                             <td>{{$a->ctunidadtema->ctunidad->nombre}}</td>
+                             <td>{{$a->ctunidadtema->titulo}}</td>
                              <td>{{$a->user->nombres." ".$a->user->apellidos}}</td>
                          </tr>
                      </tbody>
@@ -90,7 +94,7 @@
          <div class="col-md-12">
              <div class="col-md-6">
                  <div class="callout callout-danger" style="padding: 5px; padding-left: 20px; text-align: center;">
-                     <h2>Todas las Preguntas de la Materia</h2>
+                     <h2>Todas las Preguntas de la Materia y Tema Indicado</h2>
                  </div>
                  <div class="table-responsive">
                      <table id="tb" class="table table-bordered table-striped table-hover">

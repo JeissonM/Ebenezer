@@ -82,6 +82,14 @@
                          <td class="subject">{{$a->resp}}</td>
                      </tr>
                      <tr class="read">
+                         <td class="contact"><b>Unidad</b></td>
+                         <td class="subject">{{$a->ctunidadtema->ctunidad->nombre}}</td>
+                     </tr>
+                     <tr class="read">
+                         <td class="contact"><b>Tema</b></td>
+                         <td class="subject">{{$a->ctunidadtema->titulo}}</td>
+                     </tr>
+                     <tr class="read">
                          <td class="contact"><b>Autor</b></td>
                          <td class="subject">{{$a->user->nombres." ".$a->user->apellidos}}</td>
                      </tr>

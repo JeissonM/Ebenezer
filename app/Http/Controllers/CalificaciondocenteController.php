@@ -13,15 +13,14 @@ use Illuminate\Http\Request;
 class CalificaciondocenteController extends Controller
 {
     //index
-    public function index($id)
-    {
+    public function index($id) {
         $gmd = Grupomateriadocente::find($id);
         $se = Sistemaevaluacion::where('estado', 'ACTUAL')->first();
         $eval = $se->evaluacionacademicas;
         if (count($eval) > 0) {
             foreach ($eval as $e) {
                 $e->actividades = null;
-                $acts = Asignaractividad::where([['periodoacademico_id', $gmd->gradomateria->periodoacademico_id], ['evaluacionacademica_id', $e->id], ['grupo_id', $gmd->grupo_id],['materia_id',$gmd->gradomateria->materia_id]])->get();
+                $acts = Asignaractividad::where([['periodoacademico_id', $gmd->gradomateria->periodoacademico_id], ['evaluacionacademica_id', $e->id], ['grupo_id', $gmd->grupo_id], ['materia_id', $gmd->gradomateria->materia_id]])->get();
                 $e->totalact = count($acts);
                 if ($e->totalact > 0) {
                     $e->actividades = $acts;
@@ -36,8 +35,7 @@ class CalificaciondocenteController extends Controller
     }
 
     //lista estudiantes para calificar
-    public function listarestudiantes($id, $a)
-    {
+    public function listarestudiantes($id, $a) {
         $gmd = Grupomateriadocente::find($id);
         $act = Asignaractividad::find($a);
         $contactos = $gmd->grupo->estudiantegrupos;
@@ -54,12 +52,12 @@ class CalificaciondocenteController extends Controller
             ->with('location', 'aulavirtual')
             ->with('gmd', $gmd)
             ->with('a', $act)
+            ->with('actividad', $act->actividad)
             ->with('contactos', $contactos);
     }
 
     //vista para calificar
-    public function vistacalificar($id, $a, $e)
-    {
+    public function vistacalificar($id, $a, $e) {
         $gmd = Grupomateriadocente::find($id);
         $act = Asignaractividad::find($a);
         $cal = Resultadoactividad::where([['estudiante_id', $e], ['asignaractividad_id', $a]])->first();
@@ -73,8 +71,7 @@ class CalificaciondocenteController extends Controller
     }
 
     //calificar cero
-    public function calificarcero(Request $request)
-    {
+    public function calificarcero(Request $request) {
         $r = new Resultadoactividad($request->all());
         $r->recurso = "NO";
         $r->anotaciones_docente = strtoupper($r->anotaciones_docente);
@@ -89,8 +86,7 @@ class CalificaciondocenteController extends Controller
     }
 
     //calificar actividad
-    public function calificaractividad(Request $request)
-    {
+    public function calificaractividad(Request $request) {
         $r = Resultadoactividad::find($request->r_id);
         $r->anotaciones_docente = strtoupper($request->anotaciones_docente);
         $r->anotaciones_sistema = "El docente modificó la calificación. Anotaciones anteriores a la modificación: " . $r->anotaciones_sistema;
@@ -105,8 +101,7 @@ class CalificaciondocenteController extends Controller
     }
 
     //calificar actividad observaciones
-    public function observaciones(Request $request)
-    {
+    public function observaciones(Request $request) {
         $r = Resultadoactividad::find($request->r_id);
         $r->anotaciones_docente = strtoupper($request->anotaciones_docente);
         $r->anotaciones_sistema = "El docente agregó observaciones a la calificación. Anotaciones anteriores a la modificación: " . $r->anotaciones_sistema;
@@ -120,14 +115,12 @@ class CalificaciondocenteController extends Controller
     }
 
     //devuelve la respuesta correcta
-    public static function respuesta_correcta($c, $p)
-    {
+    public static function respuesta_correcta($c, $p) {
         return Resactividadresp::where([['resultadoactividad_id', $c], ['pregunta_id', $p]])->first();
     }
 
     //solocalificacion
-    public function solocalificacion(Request $request)
-    {
+    public function solocalificacion(Request $request) {
         $r = Resactividadresp::find($request->resactividadresp_id);
         $r->estado = "CALIFICADA";
         $r->puntos_obtenidos = $request->puntos_obtenidos;
@@ -143,8 +136,7 @@ class CalificaciondocenteController extends Controller
     }
 
     //Recalificar
-    public function recalificar($id)
-    {
+    public function recalificar($id) {
         $r = Resultadoactividad::find($id);
         $a = $r->asignaractividad->actividad;
         $preguntas = $a->actividadpreguntas;

@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Auditoriaacademico;
+use App\Ctunidad;
 use App\Grupomateriadocente;
 use App\Pregunta;
 use App\Respuesta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PreguntaController extends Controller
 {
     //index
-    public function index($id)
-    {
+    public function index($id) {
         $gmd = Grupomateriadocente::find($id);
         $preguntas = Pregunta::where([['grado_id', $gmd->gradomateria->grado_id], ['materia_id', $gmd->gradomateria->materia_id]])->get();
         if (count($preguntas) > 0) {
@@ -32,17 +33,25 @@ class PreguntaController extends Controller
     }
 
     //crear pregunta
-    public function crear($id)
-    {
+    public function crear($id) {
         $gmd = Grupomateriadocente::find($id);
+        $unidades = Ctunidad::where([['materia_id', $gmd->gradomateria->materia_id], ['grado_id', $gmd->gradomateria->grado_id]])->get()->pluck('nombre', 'id');
         return view('aula_virtual.docente.bancopreguntacrear')
             ->with('location', 'aulavirtual')
+            ->with('unidades', $unidades)
             ->with('gmd', $gmd);
     }
 
     //guardar pregunta
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+        $validate = Validator::make($request->all(), [
+            'ctunidadtema_id' => 'required',
+            'pregunta' => 'required',
+            'tipo' => 'required'
+        ]);
+        if ($validate->fails()) {
+            return redirect()->back()->withErrors($validate->errors());
+        }
         $a = new Pregunta();
         $a->pregunta = $request->pregunta;
         $a->puntos = $request->puntos;
@@ -53,6 +62,7 @@ class PreguntaController extends Controller
         $gmd = Grupomateriadocente::find($request->gmd_id);
         $a->grado_id = $gmd->gradomateria->grado_id;
         $a->materia_id = $gmd->gradomateria->materia_id;
+        $a->ctunidadtema_id = $request->ctunidadtema_id;
         if ($a->save()) {
             $this->setAuditoria('INSERTAR', 'CREAR PREGUNTA PARA ACTIVIDAD. DATOS CREADOS: ', $a);
             flash('Pregunta creada con exito')->success();
@@ -64,8 +74,7 @@ class PreguntaController extends Controller
     }
 
     //auditoria
-    public function setAuditoria($operacion, $title, $obj)
-    {
+    public function setAuditoria($operacion, $title, $obj) {
         $u = Auth::user();
         $aud = new Auditoriaacademico();
         $aud->usuario = "ID: " . $u->identificacion . ",  USUARIO: " . $u->nombres . " " . $u->apellidos;
@@ -79,8 +88,7 @@ class PreguntaController extends Controller
     }
 
     //show
-    public function show($gmd_id, $id)
-    {
+    public function show($gmd_id, $id) {
         $gmd = Grupomateriadocente::find($gmd_id);
         $a = Pregunta::find($id);
         $resp = "---";
@@ -97,8 +105,7 @@ class PreguntaController extends Controller
     }
 
     //edit
-    public function edit($gmd_id, $id)
-    {
+    public function edit($gmd_id, $id) {
         $gmd = Grupomateriadocente::find($gmd_id);
         $a = Pregunta::find($id);
         return view('aula_virtual.docente.bancopreguntaedit')
@@ -108,8 +115,7 @@ class PreguntaController extends Controller
     }
 
     //update
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         $a = Pregunta::find($request->a_id);
         $a->puntos = $request->puntos;
         $a->pregunta = $request->pregunta;
@@ -127,8 +133,7 @@ class PreguntaController extends Controller
     }
 
     //continuar
-    public function continuar($gmd_id, $id)
-    {
+    public function continuar($gmd_id, $id) {
         $gmd = Grupomateriadocente::find($gmd_id);
         $a = Pregunta::find($id);
         $resp = "---";
@@ -145,8 +150,7 @@ class PreguntaController extends Controller
     }
 
     //guardar respuesta
-    public function storerespuesta(Request $request)
-    {
+    public function storerespuesta(Request $request) {
         $a = new Respuesta($request->all());
         $a->letra = strtoupper($a->letra);
         if ($a->save()) {
@@ -160,8 +164,7 @@ class PreguntaController extends Controller
     }
 
     //marca la respuesta como correcta
-    public function correctarespuesta($gmd, $id)
-    {
+    public function correctarespuesta($gmd, $id) {
         $r = Respuesta::find($id);
         $p = $r->pregunta;
         $p->respuesta_id = $id;
@@ -175,8 +178,7 @@ class PreguntaController extends Controller
     }
 
     //update respuesta
-    public function editrespuesta(Request $request)
-    {
+    public function editrespuesta(Request $request) {
         $a = Respuesta::find($request->respuesta_id);
         $a->letra = $request->letra;
         $a->letra = strtoupper($a->letra);
@@ -192,8 +194,7 @@ class PreguntaController extends Controller
     }
 
     //delete respuesta
-    public function deleterespuesta($gmd, $r)
-    {
+    public function deleterespuesta($gmd, $r) {
         $r = Respuesta::find($r);
         if ($r->delete()) {
             $this->setAuditoria('ELIMINAR', 'ELIMINAR RESPUESTA DE PREGUNTA DE ACTIVIDAD. DATOS ELIMINADOS: ', $r);

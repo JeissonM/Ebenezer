@@ -17,8 +17,7 @@ use Illuminate\Support\Facades\Auth;
 class RealizaractividadController extends Controller
 {
     //index
-    public function index($id)
-    {
+    public function index($id) {
         $gmd = Grupomateriadocente::find($id);
         $se = Sistemaevaluacion::where('estado', 'ACTUAL')->first();
         $eval = $se->evaluacionacademicas;
@@ -48,8 +47,7 @@ class RealizaractividadController extends Controller
     }
 
     //determina si una actividad está vencida
-    public static function vencida($id)
-    {
+    public static function vencida($id) {
         date_default_timezone_set('America/Bogota');
         $vencida = "NO";
         $a = Asignaractividad::find($id);
@@ -64,8 +62,7 @@ class RealizaractividadController extends Controller
     }
 
     //ver actividad
-    public function ver($id, $a)
-    {
+    public function ver($id, $a) {
         $gmd = Grupomateriadocente::find($id);
         $aa = Asignaractividad::find($a);
         return view('aula_virtual.estudiante.realizaractividad_ver')
@@ -73,12 +70,12 @@ class RealizaractividadController extends Controller
             ->with('gmd', $gmd)
             ->with('se', $aa->evaluacionacademica->sistemaevaluacion)
             ->with('eval', $aa->evaluacionacademica)
+            ->with('actividad', $aa->actividad)
             ->with('aa', $aa);
     }
 
     //realizar actividad
-    public function realizar($id, $a)
-    {
+    public function realizar($id, $a) {
         $gmd = Grupomateriadocente::find($id);
         $aa = Asignaractividad::find($a);
         $u = Persona::where('numero_documento', Auth::user()->identificacion)->first();
@@ -89,12 +86,12 @@ class RealizaractividadController extends Controller
             ->with('se', $aa->evaluacionacademica->sistemaevaluacion)
             ->with('eval', $aa->evaluacionacademica)
             ->with('aa', $aa)
+            ->with('actividad', $aa->actividad)
             ->with('est', $est);
     }
 
     //subir resultado
-    public function subirresultado(Request $request)
-    {
+    public function subirresultado(Request $request) {
         $aa = Asignaractividad::find($request->asignaractividad_id);
         $r = null;
         if (count($aa->resultadoactividads) > 0) {
@@ -128,8 +125,7 @@ class RealizaractividadController extends Controller
     }
 
     //subir resultado
-    public function pedircalificacion(Request $request)
-    {
+    public function pedircalificacion(Request $request) {
         $aa = Asignaractividad::find($request->asignaractividad_id);
         if (count($aa->resultadoactividads) > 0) {
             flash('La actividad ya tiene calificación asignada')->warning();
@@ -151,8 +147,7 @@ class RealizaractividadController extends Controller
     }
 
     //guardar examen
-    public function guardarexamen(Request $request)
-    {
+    public function guardarexamen(Request $request) {
         $aa = Asignaractividad::find($request->asignaractividad_id);
         if (count($aa->resultadoactividads) > 0) {
             flash('Usted ya realizó el(la) exámen/prueba ebeduc, no puede realizarla dos o más veces')->warning();
@@ -203,7 +198,7 @@ class RealizaractividadController extends Controller
                         $cuantas = $cuantas + 1;
                     }
                 }
-                // si  $totalpts           === nota_max de calificacion 
+                // si  $totalpts           === nota_max de calificacion
                 //     $totalptsobtenidos  === x de calificacion
                 //  x=(10*$totalptsobtenidos)/$totalpts;
                 $r->calificacion = ($r->evaluacionacademica->sistemaevaluacion->nota_final * $totalptsobtenidos) / $totalpts;

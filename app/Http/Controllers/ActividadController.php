@@ -97,14 +97,6 @@ class ActividadController extends Controller
         }
         if ($a->save()) {
             $a->ctunidadestandaraprendizajes()->sync($request->logros);
-
-//            foreach ($request->logros as $item) {
-//                $ct = new Ctundestapracts();
-//                $ct->actividad_id = $a->id;
-//                $ct->ctunidadestandaraprendizaje_id = $item;
-//                $ct->user_id = $a->user_id;
-//                $ct->save();
-//            }
             $this->setAuditoria('INSERTAR', 'CREAR ACTIVIDAD ACADEMICA. DATOS CREADOS: ', $a);
             flash('Actividad creada con exito')->success();
             return redirect()->route('actividad.index', $request->gmd_id);
@@ -167,7 +159,6 @@ class ActividadController extends Controller
 
     //update
     public function update(Request $request) {
-//        dd($request->all());
         $a = Actividad::find($request->a_id);
         if ($request->data == 'BASICO') {
             $a->nombre = strtoupper($request->nombre);
@@ -188,7 +179,6 @@ class ActividadController extends Controller
         if ($request->data == 'ESCRITO') {
             $a->recurso = $request->recurso;
         }
-        $a->ctunidadtema_id = $request->ctunidadtema_id;
         if ($a->save()) {
             $a->ctunidadestandaraprendizajes()->sync($request->logros);
             $this->setAuditoria('ACTUALIZAR', 'ACTUALIZAR ACTIVIDAD ACADEMICA. DATOS ACTUALIZADOS: ', $a);
@@ -204,7 +194,7 @@ class ActividadController extends Controller
     public function continuar($gmd_id, $id) {
         $gmd = Grupomateriadocente::find($gmd_id);
         $a = Actividad::find($id);
-        $preguntas = Pregunta::where([['grado_id', $a->grado_id], ['materia_id', $a->materia_id]])->get();
+        $preguntas = Pregunta::where([['grado_id', $a->grado_id], ['materia_id', $a->materia_id], ['ctunidadtema_id', $a->ctunidadtema_id]])->get();
         $preguntasya = $a->actividadpreguntas;
         return view('aula_virtual.docente.bancoactividadcontinuar')
             ->with('location', 'aulavirtual')

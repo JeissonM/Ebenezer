@@ -39,4 +39,8 @@ class Ctunidadtema extends Model
     public function actividads() {
         return $this->hasMany(Actividad::class);
     }
+
+    public function preguntas() {
+        return $this->hasMany(Pregunta::class);
+    }
 }
