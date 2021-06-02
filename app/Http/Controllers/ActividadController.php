@@ -5,17 +5,21 @@ namespace App\Http\Controllers;
 use App\Actividad;
 use App\Actividadpregunta;
 use App\Auditoriaacademico;
+use App\Ctundestapracts;
+use App\Ctunidad;
 use App\Evaluacionacademica;
 use App\Grupomateriadocente;
 use App\Pregunta;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ActividadController extends Controller
 {
     // indice
-    public function index($id)
-    {
+    public function index($id) {
         $gmd = Grupomateriadocente::find($id);
         $actividades = Actividad::where([['grado_id', $gmd->gradomateria->grado_id], ['materia_id', $gmd->gradomateria->materia_id]])->get();
         return view('aula_virtual.docente.bancoactividad')
@@ -25,10 +29,16 @@ class ActividadController extends Controller
     }
 
     //crear actividad
-    public function crear($id)
-    {
+    public function crear($id) {
         $gmd = Grupomateriadocente::find($id);
         $evs = Evaluacionacademica::all();
+        $mat = $gmd->gradomateria->materia_id;
+        $grd = $gmd->gradomateria->grado_id;
+        $unidades = Ctunidad::where([['materia_id', $mat], ['grado_id', $grd]])->get()->pluck('nombre', 'id');
+        if (count($unidades) <= 0) {
+            flash('No hay unidades para crear actividades')->error();
+            return redirect()->route('actividad.index', $id);
+        }
         $evaluaciones = null;
         if (count($evs) > 0) {
             foreach ($evs as $e) {
@@ -42,12 +52,20 @@ class ActividadController extends Controller
         return view('aula_virtual.docente.bancoactividadcrear')
             ->with('location', 'aulavirtual')
             ->with('gmd', $gmd)
+            ->with('unidades', $unidades)
             ->with('evaluaciones', $evaluaciones);
     }
 
-    //guardar actividad 
-    public function store(Request $request)
-    {
+    //guardar actividad
+    public function store(Request $request) {
+        $validate = Validator::make($request->all(), [
+            'ctunidadtema_id' => 'required',
+            'nombre' => 'required',
+            'logros' => 'required'
+        ]);
+        if ($validate->fails()) {
+            return redirect()->back()->withErrors($validate->errors());
+        }
         $a = new Actividad();
         $a->nombre = strtoupper($request->nombre);
         $a->descripcion = strtoupper($request->descripcion);
@@ -60,6 +78,11 @@ class ActividadController extends Controller
         $gmd = Grupomateriadocente::find($request->gmd_id);
         $a->grado_id = $gmd->gradomateria->grado_id;
         $a->materia_id = $gmd->gradomateria->materia_id;
+        $a->ctunidadtema_id = $request->ctunidadtema_id;
+        if (!isset($request->logros) || count($request->logros) <= 0) {
+            flash('Debe seleccionar mínimo un logro para la actividad.')->warning();
+            return redirect()->back()->withInput($request->all());
+        }
         if ($request->tipo == 'ACTIVIDAD-RECURSO') {
             if (isset($request->recurso)) {
                 $recurso = $request->file('recurso');
@@ -73,6 +96,15 @@ class ActividadController extends Controller
             $a->recurso = $request->recurso;
         }
         if ($a->save()) {
+            $a->ctunidadestandaraprendizajes()->sync($request->logros);
+
+//            foreach ($request->logros as $item) {
+//                $ct = new Ctundestapracts();
+//                $ct->actividad_id = $a->id;
+//                $ct->ctunidadestandaraprendizaje_id = $item;
+//                $ct->user_id = $a->user_id;
+//                $ct->save();
+//            }
             $this->setAuditoria('INSERTAR', 'CREAR ACTIVIDAD ACADEMICA. DATOS CREADOS: ', $a);
             flash('Actividad creada con exito')->success();
             return redirect()->route('actividad.index', $request->gmd_id);
@@ -83,8 +115,7 @@ class ActividadController extends Controller
     }
 
     //auditoria
-    public function setAuditoria($operacion, $title, $obj)
-    {
+    public function setAuditoria($operacion, $title, $obj) {
         $u = Auth::user();
         $aud = new Auditoriaacademico();
         $aud->usuario = "ID: " . $u->identificacion . ",  USUARIO: " . $u->nombres . " " . $u->apellidos;
@@ -98,8 +129,7 @@ class ActividadController extends Controller
     }
 
     //show
-    public function show($gmd_id, $id)
-    {
+    public function show($gmd_id, $id) {
         $gmd = Grupomateriadocente::find($gmd_id);
         $a = Actividad::find($id);
         return view('aula_virtual.docente.bancoactividadver')
@@ -109,27 +139,35 @@ class ActividadController extends Controller
     }
 
     //edit
-    public function edit($gmd_id, $id)
-    {
+    public function edit($gmd_id, $id) {
         $gmd = Grupomateriadocente::find($gmd_id);
         $a = Actividad::find($id);
         $evs = Evaluacionacademica::all();
+        $unidades = Ctunidad::where([['materia_id', $gmd->gradomateria->materia_id], ['grado_id', $gmd->gradomateria->grado_id]])->get()->pluck('nombre', 'id');
+        if (count($unidades) <= 0) {
+            flash('No hay unidades para crear actividades')->error();
+            return redirect()->route('actividad.index', $id);
+        }
         $evaluaciones = null;
         if (count($evs) > 0) {
             foreach ($evs as $e) {
                 $evaluaciones[$e->id] = $e->nombre . " (" . $e->peso . "%) - SISTEMA DE EVALUACIÓN: " . $e->sistemaevaluacion->nombre;
             }
         }
+        $logros = json_decode($this->getAprendizajes($a->ctunidadtema->ctunidad_id));
+//        dd(json_decode($logros));
         return view('aula_virtual.docente.bancoactividadedit')
             ->with('location', 'aulavirtual')
             ->with('gmd', $gmd)
             ->with('a', $a)
+            ->with('unidades', $unidades)
+            ->with('logros', $logros)
             ->with('evaluaciones', $evaluaciones);
     }
 
     //update
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
+//        dd($request->all());
         $a = Actividad::find($request->a_id);
         if ($request->data == 'BASICO') {
             $a->nombre = strtoupper($request->nombre);
@@ -150,7 +188,9 @@ class ActividadController extends Controller
         if ($request->data == 'ESCRITO') {
             $a->recurso = $request->recurso;
         }
+        $a->ctunidadtema_id = $request->ctunidadtema_id;
         if ($a->save()) {
+            $a->ctunidadestandaraprendizajes()->sync($request->logros);
             $this->setAuditoria('ACTUALIZAR', 'ACTUALIZAR ACTIVIDAD ACADEMICA. DATOS ACTUALIZADOS: ', $a);
             flash('Actividad actualizada con exito')->success();
             return redirect()->route('actividad.index', $request->gmd_id);
@@ -161,8 +201,7 @@ class ActividadController extends Controller
     }
 
     //continuar
-    public function continuar($gmd_id, $id)
-    {
+    public function continuar($gmd_id, $id) {
         $gmd = Grupomateriadocente::find($gmd_id);
         $a = Actividad::find($id);
         $preguntas = Pregunta::where([['grado_id', $a->grado_id], ['materia_id', $a->materia_id]])->get();
@@ -176,8 +215,7 @@ class ActividadController extends Controller
     }
 
     //add pregunta
-    public function addpregunta($gmd, $a, $p)
-    {
+    public function addpregunta($gmd, $a, $p) {
         $ap = new Actividadpregunta();
         $ap->actividad_id = $a;
         $ap->pregunta_id = $p;
@@ -197,8 +235,7 @@ class ActividadController extends Controller
     }
 
     //delete pregunta
-    public function deletepregunta($gmd, $py)
-    {
+    public function deletepregunta($gmd, $py) {
         $ap = Actividadpregunta::find($py);
         if ($ap->delete()) {
             $this->setAuditoria('ELIMINAR', 'QUITAR PREGUNTA DE ACTIVIDAD ACADEMICA. DATOS RETIRADOS: ', $ap);
@@ -208,5 +245,39 @@ class ActividadController extends Controller
             flash('La pregunta no pudo ser retirada la actividad')->error();
             return redirect()->route('actividad.continuar', [$gmd, $ap->actividad_id]);
         }
+    }
+
+    //obtiene los temas de una ctunidad_id
+    public function getTemas($ctunidad_id) {
+        $ctunid = Ctunidad::findOrFail($ctunidad_id);
+        if ($ctunid == null)
+            return "null";
+
+        $temas = $ctunid->ctunidadtemas()->pluck('titulo', 'id');
+        if (count($temas) <= 0)
+            return "null";
+
+        return json_encode($temas);
+    }
+
+    /**
+     * SELECT ctunidadestandaraprendizajes.id,
+     * (SELECT aprendizajes.logro FROM aprendizajes WHERE aprendizajes.id = ctunidadestandaraprendizajes.aprendizaje_id) AS 'logro'
+     * FROM ctunidadestandars
+     * INNER JOIN ctunidadestandaraprendizajes ON ctunidadestandaraprendizajes.ctunidadestandar_id = ctunidadestandars.id
+     * WHERE ctunidadestandars.ctunidad_id = 1
+     * @param $ctunidad_id
+     *
+     */
+    public function getAprendizajes($ctunidad_id) {
+        $query = DB::table('ctunidadestandars')
+            ->join('ctunidadestandaraprendizajes', 'ctunidadestandaraprendizajes.ctunidadestandar_id', '=', 'ctunidadestandars.id')
+            ->select('ctunidadestandaraprendizajes.id',
+                DB::raw("(SELECT aprendizajes.logro FROM aprendizajes WHERE aprendizajes.id = ctunidadestandaraprendizajes.aprendizaje_id) AS logro"))
+            ->where('ctunidadestandars.ctunidad_id', $ctunidad_id)->orderBy('logro')->get();
+        if (count($query) <= 0)
+            return "null";
+
+        return json_encode($query);
     }
 }

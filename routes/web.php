@@ -422,6 +422,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'aulavirtual'], function () 
     Route::get('actividad/{gmd}/inicio/{id}/editar', 'ActividadController@edit')->name('actividad.edit');
     Route::get('actividad/{gmd}/inicio/{id}/continuar', 'ActividadController@continuar')->name('actividad.continuar');
     Route::post('actividad/inicio/crear/update', 'ActividadController@update')->name('actividad.update');
+    Route::get('actividad/{unidad}/gettemas', 'ActividadController@getTemas')->name('actividad.gettemas');
+    Route::get('actividad/get/aprendizajes/{unidad}', 'ActividadController@getAprendizajes')->name('actividad.getaprendizajes');
     //EBEDUC
     Route::get('ebeduc/{gmd}/inicio', 'EbeducController@index')->name('ebeduc.index');
     Route::get('ebeduc/{gmd}/inicio/crear', 'EbeducController@crear')->name('ebeduc.crear');

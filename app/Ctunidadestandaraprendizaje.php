@@ -24,13 +24,19 @@ class Ctunidadestandaraprendizaje extends Model
         //
     ];
 
-    public function aprendizaje()
-    {
+    public function aprendizaje() {
         return $this->belongsTo(Aprendizaje::class);
     }
 
-    public function ctunidadestandar()
-    {
+    public function ctunidadestandar() {
         return $this->belongsTo(Ctunidadestandar::class);
+    }
+
+    public function ctundestapracts() {
+        return $this->hasMany(Ctundestapracts::class);
+    }
+
+    public function actividads() {
+        return $this->belongsToMany(Actividad::class, 'ctundestapracts');
     }
 }
