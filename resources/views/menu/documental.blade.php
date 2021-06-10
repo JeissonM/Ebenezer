@@ -52,9 +52,9 @@
         </div>-->
         @endif
         @if(session()->exists('PAG_DOCUMENTAL-LOGROS-PERSONALIZAR'))
-        <div class="col-md-6">
+        <!--<div class="col-md-6">
             <a href="{{route('logro.personalizar_inicio')}}" class="btn bg-purple btn-raised btn-block btn-flat"> LOGROS PERSONALIZADOS PARA EL ESTUDIANTE</a>
-        </div>
+        </div>-->
         @endif
         @if(session()->exists('PAG_DOCUMENTAL-BOLETINES'))
         <div class="col-md-4">
