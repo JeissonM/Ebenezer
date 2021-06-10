@@ -55,6 +55,8 @@
                              <th>GRADO</th>
                              <th>GRUPO</th>
                              <th>MATERIA</th>
+                             <th>UNIDAD</th>
+                             <th>TEMA</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -62,6 +64,8 @@
                              <td>{{$gmd->gradomateria->grado->etiqueta}}</td>
                              <td>{{$gmd->grupo->nombre}}</td>
                              <td>{{$gmd->gradomateria->materia->codigomateria." - ".$gmd->gradomateria->materia->nombre}}</td>
+                             <td>{{$a->ctunidadtema->ctunidad->nombre}}</td>
+                             <td>{{$a->ctunidadtema->titulo}}</td>
                          </tr>
                      </tbody>
                  </table>

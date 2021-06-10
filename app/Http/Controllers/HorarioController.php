@@ -21,8 +21,7 @@ class HorarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         $periodos = $unidades = $jornadas = null;
         $perds = Periodoacademico::all()->sortByDesc('anio');
         if (count($perds) > 0) {
@@ -69,8 +68,7 @@ class HorarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
@@ -80,8 +78,7 @@ class HorarioController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $hor = new Horario();
         $hor->grupo_id = $request->grupo_id;
         if (isset($request->horario)) {
@@ -118,8 +115,7 @@ class HorarioController extends Controller
      * @param \App\Horario $horario
      * @return \Illuminate\Http\Response
      */
-    public function show(Horario $horario)
-    {
+    public function show(Horario $horario) {
         //
     }
 
@@ -129,8 +125,7 @@ class HorarioController extends Controller
      * @param \App\Horario $horario
      * @return \Illuminate\Http\Response
      */
-    public function edit($grupo_id)
-    {
+    public function edit($grupo_id) {
         $grupo = Grupo::find($grupo_id);
         $horario = Horario::where('grupo_id', $grupo_id)->first();
         return view('academico.registro_academico.horario.create')
@@ -146,8 +141,7 @@ class HorarioController extends Controller
      * @param \App\Horario $horario
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Horario $horario)
-    {
+    public function update(Request $request, Horario $horario) {
         //
     }
 
@@ -157,8 +151,7 @@ class HorarioController extends Controller
      * @param \App\Horario $horario
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $horario = Horario::find($id);
         $result = $horario->delete();
         if ($result) {
@@ -182,8 +175,7 @@ class HorarioController extends Controller
     }
 
     //Horario estudiante
-    public function horarioestudiante()
-    {
+    public function horarioestudiante() {
         $u = Auth::user();
         $p = Persona::where('numero_documento', $u->identificacion)->first();
         if ($p != null) {
@@ -233,8 +225,7 @@ class HorarioController extends Controller
     }
 
     //Horario estudiante por parte de acudiente
-    public function horarioacudiente($id)
-    {
+    public function horarioacudiente($id) {
         $est = Estudiante::find($id);
         if ($est != null) {
             $estg = $est->estudiantegrupos;
@@ -268,5 +259,21 @@ class HorarioController extends Controller
             flash('Usted no es un estudiante de la institución')->error();
             return redirect()->route('menu.academicomenuacudiente', $id);
         }
+    }
+
+
+    public function horarioGrupoConsultar($unidad, $periodo, $grado, $grupo) {
+        $gr = Grupo::findOrFail($grupo);
+        if ($gr == null) {
+            return 'null';
+        }
+        $horario = $gr->horarios()->first();
+        if ($horario == null) {
+            return 'null';
+        }
+        $data['grupo'] = $gr->nombre;
+        $data['horario'] = $horario->horario;
+        $data['html'] = "<tr><td>" . $gr->nombre . "</td><td><a target='_blank' href='" . asset('horarios/' . $horario->horario) . "'>" . $horario->horario . "</a></td></tr>";
+        return json_encode($data);
     }
 }

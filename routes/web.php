@@ -11,6 +11,8 @@
   |
  */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -38,6 +40,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'menu'], function () {
     Route::get('academico/estudiante', 'MenuController@academico_e_a')->name('menu.academicoestudiante');
     Route::get('academico/acudiente', 'MenuController@academicoacudiente')->name('menu.academicoacudiente');
     Route::get('academico/{estudiante}/menu', 'MenuController@menuacudiente')->name('menu.academicomenuacudiente');
+    Route::get('reportes', 'MenuController@reportes')->name('menu.reportes');
 });
 
 
@@ -419,6 +422,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'aulavirtual'], function () 
     Route::get('actividad/{gmd}/inicio/{id}/editar', 'ActividadController@edit')->name('actividad.edit');
     Route::get('actividad/{gmd}/inicio/{id}/continuar', 'ActividadController@continuar')->name('actividad.continuar');
     Route::post('actividad/inicio/crear/update', 'ActividadController@update')->name('actividad.update');
+    Route::get('actividad/{unidad}/gettemas', 'ActividadController@getTemas')->name('actividad.gettemas');
+    Route::get('actividad/get/aprendizajes/{unidad}', 'ActividadController@getAprendizajes')->name('actividad.getaprendizajes');
     //EBEDUC
     Route::get('ebeduc/{gmd}/inicio', 'EbeducController@index')->name('ebeduc.index');
     Route::get('ebeduc/{gmd}/inicio/crear', 'EbeducController@crear')->name('ebeduc.crear');
@@ -555,4 +560,20 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'documental'], function () {
     //BOLETINES
     Route::resource('boletines', 'BoletinController');
     Route::get('boletines/{grupo}/{periodo}/{evaluacion}/procesar', 'BoletinController@procesar')->name('boletines.procesar');
+});
+
+//REPORTES
+Route::group(['middleware' => ['auth'], 'prefix' => 'reportes'], function () {
+    Route::get('listadogeneraldocentes/imprimir/{imprimir?}/{exportar?}', 'DocenteController@listadoGeneralDocente')->name('reportes.listadogeneraldocentes');
+    Route::get('cargadocente', 'ReportesController@ViewCargaDocente')->name('reportes.cargadocente');
+    Route::get('cargadocente/{unidad_id}/{periodoacademico_id}/{exportar}/imprimir/', 'DocenteController@cargaDocente')->name('reportes.cargadocenteimprimir');
+    Route::get('cargadocente/{unidad_id}/{periodoacademico_id}/{docente_id}/{exportar}/imprimir/', 'DocenteController@getCargaDocente')->name('reportes.getcargadocenteimprimir');
+    Route::get('listadogeneralestudiantes', 'ReportesController@viewListadoEstudiante')->name('reportes.listadoestudiante');
+    Route::get('listadogeneralestudiantes/{unidad_id}/{periodoacademico_id}/{situacion}/{categoria}/{exportar}/imprimir/', 'EstudianteController@listadoEstudiante')->name('reportes.listadoestudianteimprimir');
+    Route::get('horariogrupo', 'ReportesController@viewHorarioGrupo')->name('reportes.horariogrupo');
+    Route::get('horariogrupo/{unidad}/{periodo}/{grado}/{grupo}/consultar', 'HorarioController@horarioGrupoConsultar')->name('reportes.horariogrupoconsultr');
+    Route::get('estudiantesinscritos', 'ReportesController@viewEstudiantesInscritos')->name('reportes.estudiantesinscritos');
+    Route::get('estudiantesinscritos/{unidad}/{periodo}/{estado}/{exportar}/imprimir', 'AspiranteController@estudiantesInscritos')->name('reportes.estudiantesinscritosinmprimir');
+    Route::get('estudiantesmatriculados/{bool?}', 'ReportesController@viewEstudiantesMatriculados')->name('reportes.estudiantesmatriculados');
+    Route::get('estudiantesmatriculados/estados/{unidad}/{periodo}/{estado}/{exportar}/imprimir', 'EstudianteController@estudiantesMatriculados')->name('reportes.estudiantesmatriculadosinmprimir');
 });

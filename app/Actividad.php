@@ -12,7 +12,7 @@ class Actividad extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'nombre', 'descripcion', 'recurso', 'tipo', 'ebeduc', 'user_change', 'user_id', 'evaluacionacademica_id', 'grado_id', 'materia_id', 'created_at', 'updated_at'
+        'id', 'nombre', 'descripcion', 'recurso', 'tipo', 'ebeduc', 'user_change', 'user_id', 'evaluacionacademica_id', 'grado_id', 'materia_id', 'ctunidadtema_id', 'created_at', 'updated_at'
     ];
 
     /**
@@ -24,33 +24,39 @@ class Actividad extends Model
         //
     ];
 
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo('App\User');
     }
 
-    public function evaluacionacademica()
-    {
+    public function evaluacionacademica() {
         return $this->belongsTo('App\Evaluacionacademica');
     }
 
-    public function grado()
-    {
+    public function grado() {
         return $this->belongsTo('App\Grado');
     }
 
-    public function materia()
-    {
+    public function materia() {
         return $this->belongsTo('App\Materia');
     }
 
-    public function actividadpreguntas()
-    {
+    public function ctunidadtema() {
+        return $this->belongsTo(Ctunidadtema::class);
+    }
+
+    public function actividadpreguntas() {
         return $this->hasMany('App\Actividadpregunta');
     }
 
-    public function asignaractividads()
-    {
+    public function asignaractividads() {
         return $this->hasMany(Asignaractividad::class);
+    }
+
+    public function ctundestapracts() {
+        return $this->hasMany(Ctundestapracts::class);
+    }
+
+    public function ctunidadestandaraprendizajes() {
+        return $this->belongsToMany(Ctunidadestandaraprendizaje::class, 'ctundestapracts');
     }
 }

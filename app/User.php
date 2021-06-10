@@ -38,58 +38,47 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function ctunidads()
-    {
+    public function ctunidads() {
         return $this->hasMany(Ctunidad::class);
     }
 
-    public function ctunidadtemas()
-    {
+    public function ctunidadtemas() {
         return $this->hasMany(Ctunidadtema::class);
     }
 
-    public function estandars()
-    {
+    public function estandars() {
         return $this->hasMany(Estandar::class);
     }
 
-    public function actividads()
-    {
+    public function actividads() {
         return $this->hasMany('App\Actividad');
     }
 
-    public function grupousuarios()
-    {
+    public function grupousuarios() {
         return $this->belongsToMany('App\Grupousuario');
     }
 
-    public function forodiscusionrespuestas()
-    {
+    public function forodiscusionrespuestas() {
         return $this->hasMany('App\Forodiscusionrespuesta');
     }
 
-    public function forodiscusions()
-    {
+    public function forodiscusions() {
         return $this->hasMany('App\Forodiscusion');
     }
 
-    public function preguntas()
-    {
+    public function preguntas() {
         return $this->hasMany('App\Pregunta');
     }
 
-    public function logros()
-    {
+    public function logros() {
         return $this->hasMany(Logro::class);
     }
 
-    public function ctunidadtemasubtemas()
-    {
+    public function ctunidadtemasubtemas() {
         return $this->hasMany(Ctunidadtemasubtema::class);
     }
 
-    public function ctunidadevaluacions()
-    {
+    public function ctunidadevaluacions() {
         return $this->hasMany(Ctunidadevaluacion::class);
     }
 }

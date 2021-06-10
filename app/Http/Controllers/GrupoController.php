@@ -128,6 +128,7 @@ class GrupoController extends Controller
         $doc = Docente::all();
         $grupos = Grupo::where([['unidad_id', $g->unidad_id], ['periodoacademico_id', $g->periodoacademico_id], ['jornada_id', $g->jornada_id]])->get();
         $docentes = null;
+
         if (count($doc) > 0) {
             foreach ($doc as $d) {
                 $puede = true;
@@ -143,10 +144,11 @@ class GrupoController extends Controller
                 }
             }
         }
+
         return view('matricula.matricula.grupos.director')
             ->with('location', 'matricula')
             ->with('g', $g)
-            ->with('docentes', $docentes);
+            ->with('docentes', $doc);
     }
 
     /**

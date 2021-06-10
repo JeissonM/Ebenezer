@@ -24,18 +24,23 @@ class Ctunidadtema extends Model
         //
     ];
 
-    public function ctunidadtemasubtemas()
-    {
+    public function ctunidadtemasubtemas() {
         return $this->hasMany(Ctunidadtemasubtema::class);
     }
 
-    public function ctunidad()
-    {
+    public function ctunidad() {
         return $this->belongsTo(Ctunidad::class);
     }
 
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function actividads() {
+        return $this->hasMany(Actividad::class);
+    }
+
+    public function preguntas() {
+        return $this->hasMany(Pregunta::class);
     }
 }

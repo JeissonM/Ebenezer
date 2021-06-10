@@ -12,7 +12,7 @@ class Pregunta extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'pregunta', 'puntos', 'tipo', 'respuesta_id', 'user_change', 'user_id', 'grado_id', 'materia_id', 'created_at', 'updated_at'
+        'id', 'pregunta', 'puntos', 'tipo', 'respuesta_id', 'user_change', 'user_id', 'grado_id', 'materia_id', 'ctunidadtema_id', 'created_at', 'updated_at'
     ];
 
     /**
@@ -24,33 +24,31 @@ class Pregunta extends Model
         //
     ];
 
-    public function respuestas()
-    {
+    public function respuestas() {
         return $this->hasMany('App\Respuesta');
     }
 
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo('App\User');
     }
 
-    public function grado()
-    {
+    public function grado() {
         return $this->belongsTo('App\Grado');
     }
 
-    public function materia()
-    {
+    public function materia() {
         return $this->belongsTo('App\Materia');
     }
 
-    public function actividadpreguntas()
-    {
+    public function actividadpreguntas() {
         return $this->belongsTo('App\Actividadpregunta');
     }
 
-    public function resactividadresps()
-    {
+    public function resactividadresps() {
         return $this->hasMany(Resactividadresp::class);
+    }
+
+    public function ctunidadtema() {
+        return $this->belongsTo(Ctunidadtema::class);
     }
 }

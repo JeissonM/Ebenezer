@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Aspirante;
 use App\Estado;
+use App\Periodoacademico;
+use App\Unidad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Persona;
@@ -28,8 +30,7 @@ class AspiranteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         $u = Auth::user();
         $p = Persona::where('numero_documento', $u->identificacion)->first();
         if ($p != null) {
@@ -63,70 +64,63 @@ class AspiranteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Aspirante  $aspirante
+     * @param \App\Aspirante $aspirante
      * @return \Illuminate\Http\Response
      */
-    public function show(Aspirante $aspirante)
-    {
+    public function show(Aspirante $aspirante) {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Aspirante  $aspirante
+     * @param \App\Aspirante $aspirante
      * @return \Illuminate\Http\Response
      */
-    public function edit(Aspirante $aspirante)
-    {
+    public function edit(Aspirante $aspirante) {
         //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Aspirante  $aspirante
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Aspirante $aspirante
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Aspirante $aspirante)
-    {
+    public function update(Request $request, Aspirante $aspirante) {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Aspirante  $aspirante
+     * @param \App\Aspirante $aspirante
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Aspirante $aspirante)
-    {
+    public function destroy(Aspirante $aspirante) {
         //
     }
 
     //menu de modificacion de aspirante
-    public function menu($id)
-    {
+    public function menu($id) {
         $a = Aspirante::find($id);
         return view('acudiente.modificar_aspirante.menu')
             ->with('location', 'inscripcion')
@@ -134,8 +128,7 @@ class AspiranteController extends Controller
     }
 
     //muestra form para modificar aspirante
-    public function modaspirante($id)
-    {
+    public function modaspirante($id) {
         $a = Aspirante::find($id);
         $tipodoc = Tipodoc::all()->pluck('descripcion', 'id');
         $paises = Pais::all()->pluck('nombre', 'id');
@@ -174,8 +167,7 @@ class AspiranteController extends Controller
     }
 
     //muestra form para modificar datos complementarios del aspirante
-    public function modcomplementarios($id)
-    {
+    public function modcomplementarios($id) {
         $a = Aspirante::find($id);
         $d = $a->datoscomplementariosaspirante;
         if ($d == null) {
@@ -215,8 +207,7 @@ class AspiranteController extends Controller
     }
 
     //modifica los datos del aspirante
-    public function modificardp(Request $request)
-    {
+    public function modificardp(Request $request) {
         $a = Aspirante::find($request->id);
         $m = new Aspirante($a->attributesToArray());
         foreach ($a->attributesToArray() as $key => $value) {
@@ -258,8 +249,7 @@ class AspiranteController extends Controller
     }
 
     //modifica los datos complementarios del aspirante
-    public function modificarcomp(Request $request)
-    {
+    public function modificarcomp(Request $request) {
         $a = Aspirante::find($request->id);
         $d = $a->datoscomplementariosaspirante;
         $m = new Datoscomplementariosaspirante($d->attributesToArray());
@@ -291,5 +281,50 @@ class AspiranteController extends Controller
             flash("El aspirante no pudo ser modificado. Error: " . $result)->error();
             return redirect()->route('aspirante.menu', $request->id);
         }
+    }
+
+
+    public function estudiantesInscritos($unidad, $periodo, $estado, $exportar) {
+        $aspirates = Aspirante::where([['unidad_id', $unidad], ['periodoacademico_id', $periodo]])->get();
+        if ($estado != '0'){
+            $aspirates = Aspirante::where([['unidad_id', $unidad], ['periodoacademico_id', $periodo], ['estado', $estado]])->get();
+        }
+        if (count($aspirates) <= 0) {
+            flash('No hay estudiantes para los paramentros seleccionados.')->warning();
+            return redirect()->back();
+        }
+        $response = [];
+        foreach ($aspirates as $aspirate) {
+            $obj['identificacion'] = $aspirate->tipodoc->abreviatura . '-' . $aspirate->numero_documento;
+            $obj['nombre'] = $aspirate->primer_nombre . ' ' . $aspirate->segundo_nombre . ' ' . $aspirate->primer_apellido . ' ' . $aspirate->segundo_apellido;
+            $obj['pago'] = $aspirate->pago;
+            $obj['direccion'] = $aspirate->direccion_residencia . ' ' . $aspirate->barrio_residencia;
+            $obj['grado'] = $aspirate->grado->etiqueta;
+            $obj['estado'] = $aspirate->estado;
+            $response[] = $obj;
+        }
+
+        if (count($response) <= 0) {
+            flash('No hay estudiantes para los parametros seleccionados.')->warning();
+            return redirect()->back();
+        }
+        $unidad = Unidad::findOrFail($unidad)->nombre;
+        $periodo = Periodoacademico::findOrFail($periodo)->etiqueta;
+        $filtros = ['UNIDAD' => $unidad, 'PERÍODO ACADÉMICO' => $periodo, 'ESTADO' => $estado];
+        $titulo = "REPORTES DE ESTUDIANTES INSCRITOS- LISTADO DE ESTUDIANTES INSCRITOS";
+        $data = ReportesController::orderMultiDimensionalArray($response, 'nombre');
+        $cabeceras = ['Identificación', 'Nombre', 'Pago', 'Dirección', 'Grado', 'Estado'];
+        $encabezado = ['TOTAL ESTUDIANTES' => count($response)];
+        if ($exportar == 'pdf') {
+            $nombre = "Listao_estudiantes_inscritos.pdf";
+            return ReportesController::imprimirPdf($data, $cabeceras, $filtros, $titulo, $nombre, 1, $encabezado);
+        } else {
+            $filtros = ['FILTROS', 'UNIDAD: ' . $unidad, 'PERÍDO ACADÉMICO: ' . $periodo, 'ESTADO: ' . $estado];
+            $encabezado = ['TOTAL ESTUDIANTES: '. count($response)];
+//            $aux = json_decode(json_encode($query), true);
+            $nombre = "Listado_estudiantes_isncritos.xlsx";
+            return ReportesController::exportarExcel($data, $cabeceras, $filtros, $titulo, $nombre, $encabezado);
+        }
+
     }
 }

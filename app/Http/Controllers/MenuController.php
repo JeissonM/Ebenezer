@@ -116,4 +116,8 @@ class MenuController extends Controller
     {
         return view('menu.academicodocente')->with('location', 'academicodocente');
     }
+    //menu reportes
+    public function reportes(){
+        return view('menu.reportes')->with('location','reportes');
+    }
 }

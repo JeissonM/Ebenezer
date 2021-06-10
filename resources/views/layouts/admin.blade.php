@@ -449,6 +449,15 @@
                             <span>Académico</span></a></li>
                     @endif
                     @endif
+                    @if(session()->exists('MOD_REPORTES'))
+                        @if($location=='reportes')
+                            <li class="active"><a href="{{route('menu.reportes')}}"><i class="fa fa-book"></i>
+                                    <span>Reportes</span></a></li>
+                        @else
+                            <li><a href="{{route('menu.reportes')}}"><i class="fa fa-book"></i>
+                                    <span>Reportes</span></a></li>
+                    @endif
+                @endif
                     <!--                        <li class="treeview">
                                                     <a href="#">
                                                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
