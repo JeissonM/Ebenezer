@@ -92,7 +92,7 @@ class BoletinController extends Controller
                                 'ih' => $mm->materia->ih,
                                 'equivalencia' => $this->equivalencia($nota),
                                 'fallas' => 0,
-                                'logros' => $this->logros($g->id, $e->estudiante->grado_id, $e->estudiante->unidad_id, $e->estudiante->jornada_id, $p, $mm->materia_id, $e->estudiante_id)
+                                'logros' => $this->logros($g->id, $e->estudiante_id, $p, $ev, $mm->materia_id)
                             ];
                         }
                     }
@@ -157,8 +157,8 @@ class BoletinController extends Controller
         $boletin['puesto'] = $i;
         $pdf = PDF::loadView('documental.boletines.print', $boletin)->output();
         $path = url('') . '/storage/documentos/boletines/BOLETIN_' . $boletin['identificacion'] . "_" . $boletin['periodo'] . "_" . $fecha . ".pdf";
-        $name="BOLETIN_" . $boletin['identificacion'] . "_" . $boletin['periodo'] . "_".$fecha. ".pdf";
-        Storage::disk('public')->put('documentos/boletines/'.$name, $pdf);
+        $name = "BOLETIN_" . $boletin['identificacion'] . "_" . $boletin['periodo'] . "_" . $fecha . ".pdf";
+        Storage::disk('public')->put('documentos/boletines/' . $name, $pdf);
         return $path;
     }
 
@@ -209,25 +209,40 @@ class BoletinController extends Controller
     }
 
     //logros
-    public function logros($g, $grado, $und, $j, $p, $m, $e)
+    public function logros($g, $e, $p, $ev, $m)
     {
-        $logros = Asignarlogrogrupomateria::where([
-            ['grupo_id', $g],
-            ['grado_id', $grado],
-            ['unidad_id', $und],
-            ['jornada_id', $j],
+        $data = null;
+        $notaAprobatoria = Sistemaevaluacion::find($ev)->nota_aprobatoria;
+        $actividades = Asignaractividad::where([
             ['periodoacademico_id', $p],
+            ['evaluacionacademica_id', $ev],
+            ['grupo_id', $g],
             ['materia_id', $m]
         ])->get();
-        $data = null;
-        if (count($logros) > 0) {
-            foreach ($logros as $l) {
-                $text = $l->logro->descripcion;
-                $per = Personalizarlogro::where([['asignarlogrogrupomateria_id', $l->id], ['estudiante_id', $e]])->first();
-                if ($per != null) {
-                    $text = $per->descripcion;
+        if (count($actividades) > 0) {
+            foreach ($actividades as $act) {
+                $resultado = Resultadoactividad::where([
+                    ['periodoacademico_id', $p],
+                    ['evaluacionacademica_id', $ev],
+                    ['grupo_id', $g],
+                    ['asignaractividad_id', $act->id],
+                    ['estudiante_id', $e]
+                ])->first();
+                if ($resultado != null) {
+                    //busco el/los logros de dicha actividad
+                    $logros = $act->actividad->ctundestapracts;
+                    if (count($logros) > 0) {
+                        foreach ($logros as $l) {
+                            $text = "";
+                            if ($resultado->calificacion >= $notaAprobatoria) {
+                                $text = $l->ctunidadestandaraprendizaje->aprendizaje->logro;
+                            } else {
+                                $text = $l->ctunidadestandaraprendizaje->aprendizaje->logro_negativo;
+                            }
+                            $data[] = $text;
+                        }
+                    }
                 }
-                $data[] = $text;
             }
         }
         return $data;
