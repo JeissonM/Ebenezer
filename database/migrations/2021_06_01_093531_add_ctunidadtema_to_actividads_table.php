@@ -18,6 +18,7 @@ class AddCtunidadtemaToActividadsTable extends Migration
         });
     }
 
+
     /**
      * Reverse the migrations.
      *
