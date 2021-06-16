@@ -234,7 +234,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#tb').DataTable();
-        $('.select2').select2();
+        $('.select2').select2(); 
         if ("<?php echo $a->tipo; ?>" == 'ACTIVIDAD-ESCRITA') {
             CKEDITOR.replace('recurso');
         }
