@@ -115,8 +115,9 @@ class BoletinController extends Controller
                         'areas' => $array,
                         'grupo' => $g->nombre,
                         'jornada' => $e->estudiante->jornada->descripcion,
-                        'periodo' => $periodo->etiqueta . " " . $periodo->anio,
+                        'periodo' => $periodo->etiqueta . "-" . $periodo->anio,
                         'evaluacion' => $evaluacion->nombre . " (" . $evaluacion->peso . "%)",
+                        'labelStorage' => $evaluacion->nombre,
                         'docente' => $this->docenteGrupo($g),
                         'unidad' => $e->estudiante->unidad->nombre
                     ];
@@ -156,10 +157,17 @@ class BoletinController extends Controller
         $boletin['hoy'] = $hoy["year"] . "-" . $hoy["mon"] . "-" . $hoy["mday"] . "  Hora: " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];;
         $boletin['puesto'] = $i;
         $pdf = PDF::loadView('documental.boletines.print', $boletin)->output();
-        $path = url('') . '/storage/documentos/boletines/BOLETIN_' . $boletin['identificacion'] . "_" . $boletin['periodo'] . "_" . $fecha . ".pdf";
-        $name = "BOLETIN_" . $boletin['identificacion'] . "_" . $boletin['periodo'] . "_" . $fecha . ".pdf";
+        $name = "BOLETIN_" . $boletin['identificacion'] . "_" . $this->limpia_espacios($boletin['labelStorage']) . "_" . $fecha . ".pdf";
+        $path = url('') . '/storage/documentos/boletines/' . $name;
         Storage::disk('public')->put('documentos/boletines/' . $name, $pdf);
         return $path;
+    }
+
+    //quita los espacios en blanco de una cadena
+    function limpia_espacios($cadena)
+    {
+        $cadena = str_replace(' ', '', $cadena);
+        return $cadena;
     }
 
     //ordena arreglos multidimencionales
