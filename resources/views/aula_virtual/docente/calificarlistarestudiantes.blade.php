@@ -135,6 +135,9 @@
                                         <li>
                                             <b>Competencia:</b> {{$item->aprendizaje->componentecompetencia->competencia->competencia}}
                                         </li>
+                                        <li>
+                                            <b>Aprendizaje:</b> {{$item->aprendizaje->logro}}
+                                        </li>
                                     </ul>
                                 @endforeach
                             </td>
