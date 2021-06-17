@@ -112,39 +112,43 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead>
-                        <tr class="danger">
-                            <th>UNIDAD</th>
-                            <th>TEMA</th>
-                            <th>LOGROS</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{{$actividad->ctunidadtema->ctunidad->nombre}}</td>
-                            <td>{{$actividad->ctunidadtema->titulo}}</td>
-                            <td>
-                                @foreach($actividad->ctunidadestandaraprendizajes as $item)
-                                    <ul>
-                                        <li><b>Estandar:</b> {{$item->aprendizaje->estandarcomponente->estandar->titulo}}</li>
-                                        <li>
-                                            <b>Componente:</b> {{$item->aprendizaje->componentecompetencia->componente->componente}}
-                                        </li>
-                                        <li>
-                                            <b>Competencia:</b> {{$item->aprendizaje->componentecompetencia->competencia->competencia}}
-                                        </li>
-                                        <li>
-                                            <b>Aprendizaje:</b> {{$item->aprendizaje->logro}}
-                                        </li>
-                                    </ul>
-                                @endforeach
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                @if($actividad->ctunidadtema != null)
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                            <tr class="danger">
+                                <th>UNIDAD</th>
+                                <th>TEMA</th>
+                                <th>LOGROS</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{$actividad->ctunidadtema->ctunidad->nombre}}</td>
+                                <td>{{$actividad->ctunidadtema->titulo}}</td>
+                                <td>
+                                    @foreach($actividad->ctunidadestandaraprendizajes as $item)
+                                        <ul>
+                                            <li>
+                                                <b>Estandar:</b> {{$item->aprendizaje->estandarcomponente->estandar->titulo}}
+                                            </li>
+                                            <li>
+                                                <b>Componente:</b> {{$item->aprendizaje->componentecompetencia->componente->componente}}
+                                            </li>
+                                            <li>
+                                                <b>Competencia:</b> {{$item->aprendizaje->componentecompetencia->competencia->competencia}}
+                                            </li>
+                                            <li>
+                                                <b>Aprendizaje:</b> {{$item->aprendizaje->logro}}
+                                            </li>
+                                        </ul>
+                                    @endforeach
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
                 <h3 style="text-align: center; padding: 20px;"><b>CONTENIDO</b></h3>
                 @if($aa->actividad->tipo=='ACTIVIDAD-VACIA')
                     <h4 class="text-center text-danger">Esta actividad es solo un espacio para que el docente aplique

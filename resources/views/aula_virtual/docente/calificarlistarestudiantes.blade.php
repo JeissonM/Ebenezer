@@ -110,6 +110,7 @@
                         </tbody>
                     </table>
                 </div>
+                @if($actividad->ctunidadtema != null)
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
@@ -145,6 +146,7 @@
                         </tbody>
                     </table>
                 </div>
+                @endif
             </div>
             <div class="col-md-12">
                 <h3 style="text-align: center; padding: 20px;"><b>LISTADO DE ESTUDIANTES EN EL GRUPO</b></h3>
