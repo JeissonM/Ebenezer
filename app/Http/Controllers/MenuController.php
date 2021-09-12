@@ -93,23 +93,29 @@ class MenuController extends Controller
     {
         $u = Auth::user();
         $persona = Persona::where('numero_documento', $u->identificacion)->first();
-        $pn = $persona->personanatural;
-        $acudienteest = $pn->acudienteestudiantes;
-        $estudientes = null;
-        if (count($acudienteest) > 0) {
-            foreach ($acudienteest as $item) {
-                $estudientes[$item->estudiante_id] = $item->estudiante->personanatural->persona->tipodoc->abreviatura . ": ss" . $item->estudiante->personanatural->persona->numero_documento . " - " . $item->estudiante->personanatural->primer_nombre . " "
-                    . $item->estudiante->personanatural->segundo_nombre . " " . $item->estudiante->personanatural->primer_apellido . " " . $item->estudiante->personanatural->segundo_apellido;
+        if ($persona) {
+            $pn = $persona->personanatural;
+            $acudienteest = $pn->acudienteestudiantes;
+            $estudientes = null;
+            if (count($acudienteest) > 0) {
+                foreach ($acudienteest as $item) {
+                    $estudientes[$item->estudiante_id] = $item->estudiante->personanatural->persona->tipodoc->abreviatura . ": ss" . $item->estudiante->personanatural->persona->numero_documento . " - " . $item->estudiante->personanatural->primer_nombre . " "
+                        . $item->estudiante->personanatural->segundo_nombre . " " . $item->estudiante->personanatural->primer_apellido . " " . $item->estudiante->personanatural->segundo_apellido;
+                }
             }
+            return view('acudiente.academico.list')->with('location', 'academicoacudiente')->with('estudiantes', $estudientes);
+        } else {
+            flash("Usted no tiene aspirantes registrados, debe registrar sus datos como acudiente y luego registrar aspirantes")->error();
+            return redirect()->back();
         }
-        return view('acudiente.academico.list')->with('location','academicoacudiente')->with('estudiantes',$estudientes);
     }
 
     //
-    public function menuacudiente($est){
+    public function menuacudiente($est)
+    {
         $estudinate = Estudiante::find($est);
         $pn = $estudinate->personanatural;
-        return view('menu.academicoacudiente')->with('location','academicoacudiente')->with('a',$estudinate)->with('pn',$pn);
+        return view('menu.academicoacudiente')->with('location', 'academicoacudiente')->with('a', $estudinate)->with('pn', $pn);
     }
     //menu academico docente
     public function academicodocente()
@@ -117,7 +123,8 @@ class MenuController extends Controller
         return view('menu.academicodocente')->with('location', 'academicodocente');
     }
     //menu reportes
-    public function reportes(){
-        return view('menu.reportes')->with('location','reportes');
+    public function reportes()
+    {
+        return view('menu.reportes')->with('location', 'reportes');
     }
 }

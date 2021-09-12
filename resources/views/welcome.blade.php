@@ -20,28 +20,73 @@
             <div class="row">
                 <div class="logo text-center">
                     <img src="{{asset('images/logo.png')}}" alt="logo" width="350">
-                    <h2>Bienvenido!</h2>
-                    <h3>Ingrese a la plataforma o inicie su proceso de inscripción en línea...</h3>
+                    <h2>Hola, Bienvenido!</h2>
+                    <h3>¿Qué desea hacer? Ingrese a la plataforma o inicie su proceso de inscripción en línea</h3>
                 </div>
             </div>
         </div>
         <section style="padding-top: 20px;">
             <div class="container">
-                <div class="row bort text-center">
-                    <div class="social">
-                        <ul>
-                            <li data-toggle="tooltip" data-placement="top" title="Registro de Acudiente" class="sb"><a href="{{ route('register') }}"><i class="fa fa-arrow-right"></i></a></li>
-                            <li data-toggle="tooltip" data-placement="top" title="Ingresar al Sistema" class="sb"><a href="{{ url('/login') }}"><i class="fa fa-sign-in"></i></a></li>
-                        </ul>
+                <div class="col-xs-12 col-sm-6 col-md-3"></div>
+
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="image-flip">
+                        <div class="mainflip flip-0" style="background-color: transparent;">
+                            <div class="frontside" style="border-radius: 20px; background-color: #fff !important; opacity: 0.8;">
+                                <div class="cardTeam">
+                                    <div class="cardTeam-body text-center">
+                                        <p><img class="img-fluid" src="{{asset('images/login.png')}}" alt="cardTeam image"></p>
+                                        <h4 class="cardTeam-title">Ingresar al Sistema</h4>
+                                        <p class="cardTeam-text" style="color: #000 !important;">Ingresa a tu panel Ebenezer</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="backside" style="border-radius: 20px; background-color: #fff !important; opacity: 0.8;">
+                                <div class="cardTeam">
+                                    <div class="cardTeam-body text-center mt-4">
+                                        <h4 class="cardTeam-title">Ingresar al Sistema</h4>
+                                        <p class="cardTeam-text" style="color: #000 !important;">Ingresa al sistema y accede a todas tus funciones de Vortal según tu rol</p>
+                                        <a href="{{ url('/login') }}" class="btn btn-danger"><i class="fa fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="image-flip">
+                        <div class="mainflip flip-0" style="background-color: transparent;">
+                            <div class="frontside" style="border-radius: 20px; background-color: #fff !important; opacity: 0.8;">
+                                <div class="cardTeam">
+                                    <div class="cardTeam-body text-center">
+                                        <p><img class="img-fluid" src="{{asset('images/docente.png')}}" alt="cardTeam image"></p>
+                                        <h4 class="cardTeam-title">Regístrate en el sistema!</h4>
+                                        <p class="cardTeam-text" style="color: #000 !important;">Registro de Acudiente y Aspirantes</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="backside" style="border-radius: 20px; background-color: #fff !important; opacity: 0.8;">
+                                <div class="cardTeam">
+                                    <div class="cardTeam-body text-center mt-4">
+                                        <h4 class="cardTeam-title">Registro en el sistema</h4>
+                                        <p class="cardTeam-text" style="color: #000 !important;">Date prisa! Registra un usuario como acudiente, procede a llenar tus datos y registrar a tus hijos para pertenecer a la insitución. ¿Qué esperas?</p>
+                                        <a href="{{ route('register') }}" class="btn btn-danger"><i class="fa fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-6 col-md-3"></div>
             </div>
         </section>
         <footer class="footer">
             <div class="container">
                 <div class="row bort">
                     <div class="copyright">
-                        © 2020 {{config('app.name')}}. Todos los Derechos Reservados.
+                        © 2021 {{config('app.name')}}. Todos los Derechos Reservados.
                         <div class="credits">Desarrollado por <a href="#">Jeisson Mandón</a>
                         </div>
                     </div>

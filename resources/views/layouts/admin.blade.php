@@ -406,11 +406,11 @@
                     @endif
                     @if(session()->exists('MOD_DOCUMENTAL'))
                     @if($location=='documental')
-                    <li class="active"><a href="{{route('menu.documental')}}"><i class="fa fa-folder"></i> <span>Documental</span></a>
+                    <li class="active"><a href="{{route('menu.documental')}}"><i class="fa fa-folder"></i> <span>Estándares y Competencias</span></a>
                     </li>
                     @else
                     <li><a href="{{route('menu.documental')}}"><i class="fa fa-folder"></i>
-                            <span>Documental</span></a></li>
+                            <span>Estándares y Competencias</span></a></li>
                     @endif
                     @endif
                     @if(session()->exists('MOD_PANEL-DOCENTE'))
@@ -513,7 +513,7 @@
             <div class="pull-right hidden-xs">
                 <b>Version</b> 1.0
             </div>
-            <strong>Copyright &copy; 2019 <a href="{{ config('app.url') }}">Colegio <b>Ebenezer</b></a>.</strong> Todos los
+            <strong>Copyright &copy; 2021 <a href="{{ config('app.url') }}">Colegio <b>Ebenezer</b></a>.</strong> Todos los
             derechos reservados.
         </footer>
 

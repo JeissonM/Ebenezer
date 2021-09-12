@@ -44,7 +44,7 @@
         <script src="{{ asset('dist/js/material.min.js')}}"></script>
         <script src="{{ asset('dist/js/ripples.min.js')}}"></script>
         <script>
-$.material.init();
+            $.material.init();
         </script>
     </body>
 </html>

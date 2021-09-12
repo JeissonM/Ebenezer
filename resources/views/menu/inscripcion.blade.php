@@ -28,7 +28,14 @@
     <div class="box-body">
         @if(session()->exists('PAG_PANELACUDIENTE-INSCRIPCION-INFORMACIONACUDIENTE'))
         <div class="col-md-4">
-            <a href="{{route('inscripcion.index')}}" class="btn btn-success btn-raised btn-block btn-flat"> DATOS DEL ACUDIENTE</a>
+            <a href="{{route('inscripcion.index')}}" class="btn btn-block btn-social btn-default btn-flat btn-raised">
+                <i>1</i>
+                <font style="vertical-align: inherit;">
+                    <font style="vertical-align: inherit;"> DATOS DEL ACUDIENTE
+                    </font>
+                </font>
+                <div class="ripple-container"></div>
+            </a>
         </div>
         @endif
         @if(session()->exists('PAG_PANELACUDIENTE-INSCRIPCION-INSCRIBIRASPIRANTE'))

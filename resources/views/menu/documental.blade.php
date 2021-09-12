@@ -17,7 +17,7 @@
 </div>
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">MENÚ MODULO DOCUMENTAL</h3>
+        <h3 class="box-title">MENÚ MODULO ESTÁNDARES Y COMPETENCIAS</h3>
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Minimizar">
                 <i class="fa fa-minus"></i></button>
