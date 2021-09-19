@@ -58,7 +58,7 @@
                                 @if($a->entrevista!=null)
                                 ENTREVISTA AGENDADA
                                 @else
-                                <a href="{{route('entrevistaa.show',$a->id)}}" style="margin-left: 10px;" data-toggle="tooltip" title="Programar Entrevista" style="margin-left: 10px;"><i class="fa fa-calendar-check-o"></i></a>
+                                <a href="{{route('entrevistaa.show',$a->id)}}" style="margin-left: 10px;" data-toggle="tooltip" title="Programar Entrevista" style="margin-left: 10px;"><i class="fa fa-calendar-check-o">Agendar</i></a>
                                 @endif
                             </td>
                         </tr>

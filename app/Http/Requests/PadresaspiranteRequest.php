@@ -27,7 +27,6 @@ class PadresaspiranteRequest extends FormRequest
             'numero_documento' => 'required|max:15',
             'primer_nombre' => 'required|max:50',
             'primer_apellido' => 'required|max:50',
-            'padre_madre' => 'required',
             'tipodoc_id' => 'required',
             'aspirante_id' => 'required'
         ];

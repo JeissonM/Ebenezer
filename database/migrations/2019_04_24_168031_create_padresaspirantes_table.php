@@ -28,7 +28,7 @@ class CreatePadresaspirantesTable extends Migration {
             $table->string('telefono')->nullable();
             $table->string('celular')->nullable();
             $table->string('correo')->nullable();
-            $table->string('padre_madre')->default('PADRE');
+            $table->string('padre_madre')->default('PADRE')->nullable();
             $table->integer('sexo_id')->unsigned()->nullable();
             $table->foreign('sexo_id')->references('id')->on('sexos')->onDelete('cascade');
             $table->integer('tipodoc_id')->unsigned();

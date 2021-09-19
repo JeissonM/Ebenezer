@@ -150,7 +150,7 @@ class EntrevistaController extends Controller
                 return redirect()->route('entrevistaa.index');
             }
         } else {
-            flash("No hay períodos programados para la UNIDAD, PERÍODO y JORNADA del aspirante, reporte el error a la institución, no es normal que esto ocurra.")->warning();
+            flash("No hay períodos programados para la UNIDAD, PERÍODO y JORNADA del aspirante, por favor ponerse en contacto al siguiente número de telefono xxx-xxx-xxxx o al correo: xxxxxx@example.com")->warning();
             return redirect()->route('entrevistaa.index');
         }
     }

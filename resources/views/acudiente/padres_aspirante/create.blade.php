@@ -167,46 +167,48 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <h3>Información Complementaria</h3>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>¿Vive?</label>
-                            <select class="form-control" name="vive">
-                                <option value="SI">SI</option>
-                                <option value="NO">NO</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>¿Es Acudiente?</label>
-                            <select class="form-control" name="acudiente">
-                                <option value="SI">SI</option>
-                                <option value="NO">NO</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Padre/Madre*</label>
-                            <select class="form-control" name="padre_madre" required>
-                                <option value="PADRE">PADRE</option>
-                                <option value="MADRE">MADRE</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Profesión/Ocupación</label>
-                            <select class="form-control select2" name="ocupacion_id">
-                                @foreach($profesions as $key=>$value)
-                                <option value="{{$key}}">{{$value}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
+{{--                <div class="col-md-12">--}}
+{{--                    <h3>Información Complementaria</h3>--}}
+{{--                    <div class="col-md-4">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>¿Vive?</label>--}}
+{{--                            <select class="form-control" name="vive">--}}
+{{--                                <option>--Seleccione una opcion--</option>--}}
+{{--                                <option value="SI">SI</option>--}}
+{{--                                <option value="NO">NO</option>--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-4">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>¿Es Acudiente?</label>--}}
+{{--                            <select class="form-control" name="acudiente">--}}
+{{--                                <option>--Seleccione una opcion--</option>--}}
+{{--                                <option value="SI">SI</option>--}}
+{{--                                <option value="NO">NO</option>--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-4">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Padre/Madre*</label>--}}
+{{--                            <select class="form-control" name="padre_madre" required>--}}
+{{--                                <option value="PADRE">PADRE</option>--}}
+{{--                                <option value="MADRE">MADRE</option>--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-12">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Profesión/Ocupación</label>--}}
+{{--                            <select class="form-control select2" name="ocupacion_id">--}}
+{{--                                @foreach($profesions as $key=>$value)--}}
+{{--                                <option value="{{$key}}">{{$value}}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-md-12" style="margin-top: 20px !important">
                     <div class="form-group">
                         <button class="btn btn-success icon-btn pull-left" type="submit"><i class="fa fa-fw fa-lg fa-save"></i>Guardar</button>

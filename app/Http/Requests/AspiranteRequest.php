@@ -33,7 +33,6 @@ class AspiranteRequest extends FormRequest
             'unidad_id' => 'required',
             'estrato_id' => 'required',
             'jornada_id' => 'required',
-            'circunscripcion_id' => 'required',
             'situacionanioanterior_id' => 'required'
         ];
     }

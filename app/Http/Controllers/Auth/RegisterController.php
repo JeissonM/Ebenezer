@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
-class RegisterController extends Controller {
+class RegisterController extends Controller
+{
     /*
       |--------------------------------------------------------------------------
       | Register Controller
@@ -20,7 +21,7 @@ class RegisterController extends Controller {
       |
      */
 
-use RegistersUsers;
+    use RegistersUsers;
 
     /**
      * Where to redirect users after registration.
@@ -41,34 +42,37 @@ use RegistersUsers;
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data) {
+        $messages = [
+            'password.regex' => 'La contraseña debe tener al menos seis y maximo diez caracteres, 1 mayúscula, 1 minúscula, 1 número, y coincidir con la confirmación.'
+        ];
         return Validator::make($data, [
-                    'identificacion' => ['required', 'string', 'max:255', 'unique:users'],
-                    'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                    'nombres' => ['required', 'string', 'max:255'],
-                    'apellidos' => ['required', 'string', 'max:255'],
-                    'password' => ['required', 'string', 'min:6', 'confirmed'],
-        ]);
+            'identificacion' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'nombres' => ['required', 'string', 'max:255'],
+            'apellidos' => ['required', 'string', 'max:255'],
+            'password' => ['required', 'string', 'min:6', 'max:10', 'confirmed', 'regex:/[a-z]{1}/', 'regex:/[A-Z]{1}/', 'regex:/[0-9]{1}/'],
+        ],$messages);
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \App\User
      */
     protected function create(array $data) {
         $result = User::create([
-                    'identificacion' => $data['identificacion'],
-                    'nombres' => strtoupper($data['nombres']),
-                    'apellidos' => strtoupper($data['apellidos']),
-                    'user_change' => $data['identificacion'],
-                    'email' => $data['email'],
-                    'password' => Hash::make($data['password']),
-                    'estado' => 'ACTIVO'
+            'identificacion' => $data['identificacion'],
+            'nombres' => strtoupper($data['nombres']),
+            'apellidos' => strtoupper($data['apellidos']),
+            'user_change' => $data['identificacion'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'estado' => 'ACTIVO'
         ]);
         $result->grupousuarios()->sync(3);
         return $result;

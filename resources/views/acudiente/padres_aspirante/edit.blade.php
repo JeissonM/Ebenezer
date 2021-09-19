@@ -169,65 +169,65 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <h3>Información Complementaria</h3>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>¿Vive?</label>
-                            <select class="form-control" name="vive">
-                                @if($p->vive=='SI')
-                                <option selected value="SI">SI</option>
-                                <option value="NO">NO</option>
-                                @else
-                                <option value="SI">SI</option>
-                                <option selected value="NO">NO</option>
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>¿Es Acudiente?</label>
-                            <select class="form-control" name="acudiente">
-                                @if($p->acudiente=='SI')
-                                <option selected value="SI">SI</option>
-                                <option value="NO">NO</option>
-                                @else
-                                <option value="SI">SI</option>
-                                <option selected value="NO">NO</option>
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Padre/Madre*</label>
-                            <select class="form-control" name="padre_madre" required>
-                                @if($p->padre_madre=='PADRE')
-                                <option selected value="PADRE">PADRE</option>
-                                <option value="MADRE">MADRE</option>
-                                @else
-                                <option value="PADRE">PADRE</option>
-                                <option selected value="MADRE">MADRE</option>
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Profesión/Ocupación</label>
-                            <select class="form-control select2" name="ocupacion_id">
-                                @foreach($profesions as $key=>$value)
-                                @if($key==$p->ocupacion_id)
-                                <option selected value="{{$key}}">{{$value}}</option>
-                                @else
-                                <option value="{{$key}}">{{$value}}</option>
-                                @endif
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
+{{--                <div class="col-md-12">--}}
+{{--                    <h3>Información Complementaria</h3>--}}
+{{--                    <div class="col-md-4">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>¿Vive?</label>--}}
+{{--                            <select class="form-control" name="vive">--}}
+{{--                                @if($p->vive=='SI')--}}
+{{--                                <option selected value="SI">SI</option>--}}
+{{--                                <option value="NO">NO</option>--}}
+{{--                                @else--}}
+{{--                                <option value="SI">SI</option>--}}
+{{--                                <option selected value="NO">NO</option>--}}
+{{--                                @endif--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-4">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>¿Es Acudiente?</label>--}}
+{{--                            <select class="form-control" name="acudiente">--}}
+{{--                                @if($p->acudiente=='SI')--}}
+{{--                                <option selected value="SI">SI</option>--}}
+{{--                                <option value="NO">NO</option>--}}
+{{--                                @else--}}
+{{--                                <option value="SI">SI</option>--}}
+{{--                                <option selected value="NO">NO</option>--}}
+{{--                                @endif--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-4">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Padre/Madre*</label>--}}
+{{--                            <select class="form-control" name="padre_madre" required>--}}
+{{--                                @if($p->padre_madre=='PADRE')--}}
+{{--                                <option selected value="PADRE">PADRE</option>--}}
+{{--                                <option value="MADRE">MADRE</option>--}}
+{{--                                @else--}}
+{{--                                <option value="PADRE">PADRE</option>--}}
+{{--                                <option selected value="MADRE">MADRE</option>--}}
+{{--                                @endif--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-12">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Profesión/Ocupación</label>--}}
+{{--                            <select class="form-control select2" name="ocupacion_id">--}}
+{{--                                @foreach($profesions as $key=>$value)--}}
+{{--                                @if($key==$p->ocupacion_id)--}}
+{{--                                <option selected value="{{$key}}">{{$value}}</option>--}}
+{{--                                @else--}}
+{{--                                <option value="{{$key}}">{{$value}}</option>--}}
+{{--                                @endif--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-md-12" style="margin-top: 20px !important">
                     <div class="form-group">
                         <button class="btn btn-success icon-btn pull-left" type="submit"><i class="fa fa-fw fa-lg fa-save"></i>Guardar</button>

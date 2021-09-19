@@ -12,7 +12,7 @@ class Datoscomplementariosaspirante extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'padres_separados', 'iglesia_asiste', 'pastor', 'discapacidad', 'familias_en_accion', 'poblacion_victima_conflicto', 'desplazado', 'colegio_procedencia', 'compromiso_adquirido', 'user_change', 'etnia_id', 'conquienvive_id', 'rangosisben_id', 'entidadsalud_id', 'situacionanioanterior_id', 'aspirante_id', 'created_at', 'updated_at'
+        'id', 'padres_separados', 'iglesia_asiste', 'pastor', 'discapacidad','tipo_discapacidad', 'familias_en_accion', 'poblacion_victima_conflicto', 'desplazado', 'colegio_procedencia', 'compromiso_adquirido', 'user_change', 'etnia_id', 'conquienvive_id', 'rangosisben_id', 'entidadsalud_id', 'situacionanioanterior_id', 'aspirante_id', 'created_at', 'updated_at'
     ];
 
     /**

@@ -141,7 +141,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Dirección de Residencia*</label>
+                            <label>Barrio y Dirección de Residencia*</label>
                             <input class="form-control"  disabled required type="text" value="{{$p->personanatural->persona->direccion}}" name="direccion">
                         </div>
                     </div>
@@ -201,79 +201,79 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <h3>Información Complementaria</h3>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Libreta Militar</label>
-                            <input type="text" class="form-control"  disabled value="{{$p->personanatural->libreta_militar}}" name="libreta_militar" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Distrito Militar</label>
-                            <input type="text" class="form-control"  disabled value="{{$p->personanatural->distrito_militar}}" name="distrito_militar" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Clase Libreta Militar</label>
-                            <input type="text" class="form-control"  disabled name="clase_libreta" value="{{$p->personanatural->clase_libreta}}" placeholder="1 CLASE, RESERVISTA, ETC" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Edad</label>
-                            <input type="number" class="form-control"  disabled value="{{$p->personanatural->edad}}" name="edad" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Grupo Sanguíneo/RH</label>
-                            <select class="form-control"  disabled name="rh">
-                                @foreach($rh as $key=>$value)
-                                @if($key==$p->personanatural->rh)
-                                <option selected value="{{$key}}">{{$value}}</option>
-                                @else
-                                <option value="{{$key}}">{{$value}}</option>
-                                @endif
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Otra Nacionalidad</label>
-                            <input type="text" class="form-control"  disabled value="{{$p->personanatural->otra_nacionalidad}}" name="otra_nacionalidad" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Número de Pasaporte</label>
-                            <input type="text" class="form-control"  disabled value="{{$p->personanatural->numero_pasaporte}}" name="numero_pasaporte" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Nivel de Estudio(Primaria, Secundaria, Universitario, Etc)</label>
-                            <input type="text" value="{{$p->personanatural->nivel_estudio}}" class="form-control"  disabled name="nivel_estudio" />
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Profesión</label>
-                            <select class="form-control select2" name="profesion">
-                                @foreach($profesions as $key=>$value)
-                                @if($p->ocupacion_id==$key)
-                                <option selected value="{{$value}}">{{$value}}</option>
-                                @else
-                                <option value="{{$value}}">{{$value}}</option>
-                                @endif
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
+{{--                <div class="col-md-12">--}}
+{{--                    <h3>Información Complementaria</h3>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Libreta Militar</label>--}}
+{{--                            <input type="text" class="form-control"  disabled value="{{$p->personanatural->libreta_militar}}" name="libreta_militar" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Distrito Militar</label>--}}
+{{--                            <input type="text" class="form-control"  disabled value="{{$p->personanatural->distrito_militar}}" name="distrito_militar" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Clase Libreta Militar</label>--}}
+{{--                            <input type="text" class="form-control"  disabled name="clase_libreta" value="{{$p->personanatural->clase_libreta}}" placeholder="1 CLASE, RESERVISTA, ETC" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Edad</label>--}}
+{{--                            <input type="number" class="form-control"  disabled value="{{$p->personanatural->edad}}" name="edad" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Grupo Sanguíneo/RH</label>--}}
+{{--                            <select class="form-control"  disabled name="rh">--}}
+{{--                                @foreach($rh as $key=>$value)--}}
+{{--                                @if($key==$p->personanatural->rh)--}}
+{{--                                <option selected value="{{$key}}">{{$value}}</option>--}}
+{{--                                @else--}}
+{{--                                <option value="{{$key}}">{{$value}}</option>--}}
+{{--                                @endif--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Otra Nacionalidad</label>--}}
+{{--                            <input type="text" class="form-control"  disabled value="{{$p->personanatural->otra_nacionalidad}}" name="otra_nacionalidad" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Número de Pasaporte</label>--}}
+{{--                            <input type="text" class="form-control"  disabled value="{{$p->personanatural->numero_pasaporte}}" name="numero_pasaporte" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Nivel de Estudio(Primaria, Secundaria, Universitario, Etc)</label>--}}
+{{--                            <input type="text" value="{{$p->personanatural->nivel_estudio}}" class="form-control"  disabled name="nivel_estudio" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-12">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Profesión</label>--}}
+{{--                            <select class="form-control select2" name="profesion">--}}
+{{--                                @foreach($profesions as $key=>$value)--}}
+{{--                                @if($p->ocupacion_id==$key)--}}
+{{--                                <option selected value="{{$value}}">{{$value}}</option>--}}
+{{--                                @else--}}
+{{--                                <option value="{{$value}}">{{$value}}</option>--}}
+{{--                                @endif--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-md-12">
                     <h3>Información Financiera</h3>
                     <div class="col-md-3">
@@ -427,7 +427,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Dirección de Residencia*</label>
+                            <label>Barrio y Dirección de Residencia*</label>
                             <input class="form-control" required type="text" name="direccion">
                         </div>
                     </div>
@@ -450,109 +450,109 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <h3>Información de Procedencia</h3>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Fecha de Nacimiento</label>
-                            <input class="form-control" type="date" name="fecha_nacimiento">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>País de Nacimiento</label>
-                            <select class="form-control" id="paispn_id" name="paispn_id" onchange="getEstados('paispn_id', 'estadopn_id', 'ciudadpn_id')">
-                                @foreach($paises as $key=>$value)
-                                <option value="{{$key}}">{{$value}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Estado/Departamento de Nacimiento</label>
-                            <select class="form-control" id="estadopn_id" name="estadopn_id" onchange="getCiudades('estadopn_id', 'ciudadpn_id')">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Ciudad de Nacimiento</label>
-                            <select class="form-control" id="ciudadpn_id" name="ciudadpn_id">
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <h3>Información Complementaria</h3>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Libreta Militar</label>
-                            <input type="text" class="form-control" name="libreta_militar" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Distrito Militar</label>
-                            <input type="text" class="form-control" name="distrito_militar" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Clase Libreta Militar</label>
-                            <input type="text" class="form-control" name="clase_libreta" placeholder="1 CLASE, RESERVISTA, ETC" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Edad</label>
-                            <input type="number" class="form-control" name="edad" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Grupo Sanguíneo/RH</label>
-                            <select class="form-control" name="rh">
-                                <option value="A+">A+</option>
-                                <option value="A-">A-</option>
-                                <option value="B+">B+</option>
-                                <option value="B-">B-</option>
-                                <option value="AB+">AB+</option>
-                                <option value="AB-">AB-</option>
-                                <option value="O+">O+</option>
-                                <option value="O-">O-</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Otra Nacionalidad</label>
-                            <input type="text" class="form-control" name="otra_nacionalidad" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Número de Pasaporte</label>
-                            <input type="text" class="form-control" name="numero_pasaporte" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Nivel de Estudio(Primaria, Secundaria, Universitario, Etc)</label>
-                            <input type="text" class="form-control" name="nivel_estudio" />
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Profesión</label>
-                            <select class="form-control select2" name="profesion">
-                                @foreach($profesions as $key=>$value)
-                                <option value="{{$value}}">{{$value}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
+{{--                <div class="col-md-12">--}}
+{{--                    <h3>Información de Procedencia</h3>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Fecha de Nacimiento</label>--}}
+{{--                            <input class="form-control" type="date" name="fecha_nacimiento">--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>País de Nacimiento</label>--}}
+{{--                            <select class="form-control" id="paispn_id" name="paispn_id" onchange="getEstados('paispn_id', 'estadopn_id', 'ciudadpn_id')">--}}
+{{--                                @foreach($paises as $key=>$value)--}}
+{{--                                <option value="{{$key}}">{{$value}}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Estado/Departamento de Nacimiento</label>--}}
+{{--                            <select class="form-control" id="estadopn_id" name="estadopn_id" onchange="getCiudades('estadopn_id', 'ciudadpn_id')">--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Ciudad de Nacimiento</label>--}}
+{{--                            <select class="form-control" id="ciudadpn_id" name="ciudadpn_id">--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div class="col-md-12">--}}
+{{--                    <h3>Información Complementaria</h3>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Libreta Militar</label>--}}
+{{--                            <input type="text" class="form-control" name="libreta_militar" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Distrito Militar</label>--}}
+{{--                            <input type="text" class="form-control" name="distrito_militar" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Clase Libreta Militar</label>--}}
+{{--                            <input type="text" class="form-control" name="clase_libreta" placeholder="1 CLASE, RESERVISTA, ETC" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Edad</label>--}}
+{{--                            <input type="number" class="form-control" name="edad" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Grupo Sanguíneo/RH</label>--}}
+{{--                            <select class="form-control" name="rh">--}}
+{{--                                <option value="A+">A+</option>--}}
+{{--                                <option value="A-">A-</option>--}}
+{{--                                <option value="B+">B+</option>--}}
+{{--                                <option value="B-">B-</option>--}}
+{{--                                <option value="AB+">AB+</option>--}}
+{{--                                <option value="AB-">AB-</option>--}}
+{{--                                <option value="O+">O+</option>--}}
+{{--                                <option value="O-">O-</option>--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Otra Nacionalidad</label>--}}
+{{--                            <input type="text" class="form-control" name="otra_nacionalidad" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Número de Pasaporte</label>--}}
+{{--                            <input type="text" class="form-control" name="numero_pasaporte" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Nivel de Estudio(Primaria, Secundaria, Universitario, Etc)</label>--}}
+{{--                            <input type="text" class="form-control" name="nivel_estudio" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-12">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Profesión</label>--}}
+{{--                            <select class="form-control select2" name="profesion">--}}
+{{--                                @foreach($profesions as $key=>$value)--}}
+{{--                                <option value="{{$value}}">{{$value}}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-md-12">
                     <h3>Información Financiera</h3>
                     <div class="col-md-3">
@@ -636,6 +636,10 @@
     $(document).ready(function() {
         $('#example1').DataTable();
         $('.select2').select2();
+        $("#pais_id").val(191);
+        getEstados('pais_id','estado_id','ciudad_id');
+        $("#paispn_id").val(191);
+        getEstados('paispn_id', 'estadopn_id', 'ciudadpn_id')
     });
 
     function getEstados(pais, dpto, ciudad) {

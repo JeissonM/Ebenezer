@@ -56,7 +56,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Número de Identidad*</label>
-                            <input class="form-control" type="text" required="" name="numero_documento">
+                            <input class="form-control" type="text" required="" value="{{\Illuminate\Support\Facades\Auth::user()->identificacion}}" readonly="readonly" name="numero_documento">
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -134,7 +134,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Dirección de Residencia</label>
+                            <label>Barrio y Dirección de Residencia</label>
                             <input class="form-control" type="text" name="direccion">
                         </div>
                     </div>
@@ -190,76 +190,76 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <h3>Información Complementaria</h3>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Libreta Militar</label>
-                            <input type="text" class="form-control" name="libreta_militar" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Distrito Militar</label>
-                            <input type="text" class="form-control" name="distrito_militar" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Clase Libreta Militar</label>
-                            <input type="text" class="form-control" name="clase_libreta" placeholder="1 CLASE, RESERVISTA, ETC" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Edad</label>
-                            <input type="number" class="form-control" name="edad" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Grupo Sanguíneo/RH</label>
-                            <select class="form-control" name="rh">
-                                <option value="A+">A+</option>
-                                <option value="A-">A-</option>
-                                <option value="B+">B+</option>
-                                <option value="B-">B-</option>
-                                <option value="AB+">AB+</option>
-                                <option value="AB-">AB-</option>
-                                <option value="O+">O+</option>
-                                <option value="O-">O-</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Otra Nacionalidad</label>
-                            <input type="text" class="form-control" name="otra_nacionalidad" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Número de Pasaporte</label>
-                            <input type="text" class="form-control" name="numero_pasaporte" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Nivel de Estudio(Primaria, Secundaria, Universitario, Etc)</label>
-                            <input type="text" class="form-control" name="nivel_estudio" />
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Profesión</label>
-                            <select class="form-control select2" name="profesion">
-                                @foreach($profesions as $key=>$value)
-                                <option value="{{$value}}">{{$value}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
+{{--                <div class="col-md-12">--}}
+{{--                    <h3>Información Complementaria</h3>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Libreta Militar</label>--}}
+{{--                            <input type="text" class="form-control" name="libreta_militar" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Distrito Militar</label>--}}
+{{--                            <input type="text" class="form-control" name="distrito_militar" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Clase Libreta Militar</label>--}}
+{{--                            <input type="text" class="form-control" name="clase_libreta" placeholder="1 CLASE, RESERVISTA, ETC" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Edad</label>--}}
+{{--                            <input type="number" class="form-control" name="edad" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Grupo Sanguíneo/RH</label>--}}
+{{--                            <select class="form-control" name="rh">--}}
+{{--                                <option value="A+">A+</option>--}}
+{{--                                <option value="A-">A-</option>--}}
+{{--                                <option value="B+">B+</option>--}}
+{{--                                <option value="B-">B-</option>--}}
+{{--                                <option value="AB+">AB+</option>--}}
+{{--                                <option value="AB-">AB-</option>--}}
+{{--                                <option value="O+">O+</option>--}}
+{{--                                <option value="O-">O-</option>--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Otra Nacionalidad</label>--}}
+{{--                            <input type="text" class="form-control" name="otra_nacionalidad" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Número de Pasaporte</label>--}}
+{{--                            <input type="text" class="form-control" name="numero_pasaporte" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-3">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Nivel de Estudio(Primaria, Secundaria, Universitario, Etc)</label>--}}
+{{--                            <input type="text" class="form-control" name="nivel_estudio" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-12">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Profesión</label>--}}
+{{--                            <select class="form-control select2" name="profesion">--}}
+{{--                                @foreach($profesions as $key=>$value)--}}
+{{--                                <option value="{{$value}}">{{$value}}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-md-12" style="margin-top: 20px !important">
                     <div class="form-group">
                         <button class="btn btn-success icon-btn pull-left" type="submit"><i class="fa fa-fw fa-lg fa-save"></i>Guardar</button>
@@ -298,6 +298,10 @@
     $(document).ready(function() {
         $('#example1').DataTable();
         $('.select2').select2();
+        $("#pais_id").val(191);
+        getEstados('pais_id','estado_id','ciudad_id');
+        $("#paispn_id").val(191);
+        getEstados('paispn_id', 'estadopn_id', 'ciudadpn_id');
     });
 
     function getEstados(pais, dpto, ciudad) {

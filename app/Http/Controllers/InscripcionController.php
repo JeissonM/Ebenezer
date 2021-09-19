@@ -55,7 +55,7 @@ class InscripcionController extends Controller
                 $ac = $pn->acudientes;
             }
         }
-        $tipodoc = Tipodoc::all()->pluck('descripcion', 'id');
+        $tipodoc = Tipodoc::whereIn('abreviatura',['CC','CE','PA'])->pluck('descripcion', 'id');
         $paises = Pais::all()->pluck('nombre', 'id');
         $sexos = Sexo::all()->pluck('nombre', 'id');
         $profesions = Ocupacion::all()->pluck('descripcion', 'id');
@@ -413,7 +413,7 @@ class InscripcionController extends Controller
         $asp = $this->setAspirante($foto, $request->numero_documento,  $request->lugar_expedicion,  $request->fecha_expedicion,  $request->rh,  $request->primer_nombre,  $request->segundo_nombre,  $request->primer_apellido,  $request->segundo_apellido,  $request->fecha_nacimiento,  $request->telefono,  $request->celular,  $request->correo,  $request->direccion_residencia,  $request->barrio_residencia,  null,  $request->tipodoc_id,  $request->sexo_id,  $request->ciudad_id,  $request->periodoacademico_id,  $request->grado_id,  $request->unidad_id,  $request->estrato_id,  $request->jornada_id,  $request->convocatoria_id,  $request->circunscripcion_id);
         if ($asp->save()) {
             $this->setAuditoriaadmision('INSERTAR', 'CREACIÓN DE ASPIRANTES. DATOS: ', $asp);
-            $dc = $this->setDatoscomplementarios($request->padres_separados,  $request->iglesia_asiste,  $request->pastor,  $request->discapacidad,  $request->familias_en_accion,  $request->poblacion_victima_conflicto,  $request->desplazado,  $request->colegio_procedencia,  $request->compromiso_adquirido,  null,  $request->etnia_id,  $request->conquienvive_id,  $request->rangosisben_id,  $request->entidadsalud_id,  $request->situacionanioanterior_id,  $asp->id);
+            $dc = $this->setDatoscomplementarios($request->padres_separados,  $request->iglesia_asiste,  $request->pastor,  $request->discapacidad,  $request->familias_en_accion,  $request->poblacion_victima_conflicto,  $request->desplazado,  $request->colegio_procedencia,  $request->compromiso_adquirido,  null,  $request->etnia_id,  $request->conquienvive_id,  $request->rangosisben_id,  $request->entidadsalud_id,  $request->situacionanioanterior_id,  $asp->id,$request->tipo_discapacidad);
             if ($dc->save()) {
                 $this->setAuditoriaadmision('INSERTAR', 'CREACIÓN DE DATOS COMPLEMENTARIOS ASPIRANTES. DATOS: ', $dc);
                 $u = Auth::user();
@@ -422,7 +422,7 @@ class InscripcionController extends Controller
                 if ($ac->save()) {
                     $this->setAuditoriaadmision('INSERTAR', 'CREACIÓN DE ACUDIENTE PARA EL ASPIRANTES. DATOS: ', $ac);
                     flash("El aspirante ha sido registrado con éxito.")->success();
-                    return redirect()->route('inscripcion.aspirante');
+                    return redirect()->route('menu.inscripcion');
                 } else {
                     $dc->delete();
                     $asp->delete();
@@ -438,7 +438,6 @@ class InscripcionController extends Controller
             flash("No se pudo guardar la información del aspirante")->error();
             return redirect()->route('inscripcion.aspirante');
         }
-        dd($request->all());
     }
 
     //crea aspirante
@@ -483,7 +482,7 @@ class InscripcionController extends Controller
     }
 
     //Datos complementarios del aspirante
-    public function setDatoscomplementarios($padres_separados = 'NO',  $iglesia_asiste = null,  $pastor = null,  $discapacidad = 'NO',  $familias_en_accion = 'NO',  $poblacion_victima_conflicto = 'NO',  $desplazado = 'NO',  $colegio_procedencia = null,  $compromiso_adquirido = 'NO',  $user_change = null,  $etnia_id = null,  $conquienvive_id = null,  $rangosisben_id = null,  $entidadsalud_id = null,  $situacionanioanterior_id,  $aspirante_id)
+    public function setDatoscomplementarios($padres_separados = 'NO',  $iglesia_asiste = null,  $pastor = null,  $discapacidad = 'NO',  $familias_en_accion = 'NO',  $poblacion_victima_conflicto = 'NO',  $desplazado = 'NO',  $colegio_procedencia = null,  $compromiso_adquirido = 'NO',  $user_change = null,  $etnia_id = null,  $conquienvive_id = null,  $rangosisben_id = null,  $entidadsalud_id = null,  $situacionanioanterior_id,  $aspirante_id, $tipo_discapacidad = null)
     {
         $d = new Datoscomplementariosaspirante();
         $d->padres_separados = $padres_separados;
@@ -503,6 +502,7 @@ class InscripcionController extends Controller
         $d->entidadsalud_id = $entidadsalud_id;
         $d->situacionanioanterior_id = $situacionanioanterior_id;
         $d->aspirante_id = $aspirante_id;
+        $d->tipo_discapacidad = $tipo_discapacidad;
         return $d;
     }
 
