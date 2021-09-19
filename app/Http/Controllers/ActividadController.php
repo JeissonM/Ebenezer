@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Validator;
 class ActividadController extends Controller
 {
     // indice
-    public function index($id) {
+    public function index($id)
+    {
         $gmd = Grupomateriadocente::find($id);
         $actividades = Actividad::where([['grado_id', $gmd->gradomateria->grado_id], ['materia_id', $gmd->gradomateria->materia_id]])->get();
         return view('aula_virtual.docente.bancoactividad')
@@ -29,7 +30,8 @@ class ActividadController extends Controller
     }
 
     //crear actividad
-    public function crear($id) {
+    public function crear($id)
+    {
         $gmd = Grupomateriadocente::find($id);
         $evs = Evaluacionacademica::all();
         $mat = $gmd->gradomateria->materia_id;
@@ -57,7 +59,8 @@ class ActividadController extends Controller
     }
 
     //guardar actividad
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validate = Validator::make($request->all(), [
             'ctunidadtema_id' => 'required',
             'nombre' => 'required',
@@ -107,7 +110,8 @@ class ActividadController extends Controller
     }
 
     //auditoria
-    public function setAuditoria($operacion, $title, $obj) {
+    public function setAuditoria($operacion, $title, $obj)
+    {
         $u = Auth::user();
         $aud = new Auditoriaacademico();
         $aud->usuario = "ID: " . $u->identificacion . ",  USUARIO: " . $u->nombres . " " . $u->apellidos;
@@ -121,7 +125,8 @@ class ActividadController extends Controller
     }
 
     //show
-    public function show($gmd_id, $id) {
+    public function show($gmd_id, $id)
+    {
         $gmd = Grupomateriadocente::find($gmd_id);
         $a = Actividad::find($id);
         return view('aula_virtual.docente.bancoactividadver')
@@ -131,7 +136,8 @@ class ActividadController extends Controller
     }
 
     //edit
-    public function edit($gmd_id, $id) {
+    public function edit($gmd_id, $id)
+    {
         $gmd = Grupomateriadocente::find($gmd_id);
         $a = Actividad::find($id);
         $evs = Evaluacionacademica::all();
@@ -147,7 +153,7 @@ class ActividadController extends Controller
             }
         }
         $logros = json_decode($this->getAprendizajes($a->ctunidadtema->ctunidad_id));
-//        dd(json_decode($logros));
+        //        dd(json_decode($logros));
         return view('aula_virtual.docente.bancoactividadedit')
             ->with('location', 'aulavirtual')
             ->with('gmd', $gmd)
@@ -158,7 +164,8 @@ class ActividadController extends Controller
     }
 
     //update
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
         $a = Actividad::find($request->a_id);
         if ($request->data == 'BASICO') {
             $a->nombre = strtoupper($request->nombre);
@@ -191,7 +198,8 @@ class ActividadController extends Controller
     }
 
     //continuar
-    public function continuar($gmd_id, $id) {
+    public function continuar($gmd_id, $id)
+    {
         $gmd = Grupomateriadocente::find($gmd_id);
         $a = Actividad::find($id);
         $preguntas = Pregunta::where([['grado_id', $a->grado_id], ['materia_id', $a->materia_id], ['ctunidadtema_id', $a->ctunidadtema_id]])->get();
@@ -205,7 +213,8 @@ class ActividadController extends Controller
     }
 
     //add pregunta
-    public function addpregunta($gmd, $a, $p) {
+    public function addpregunta($gmd, $a, $p)
+    {
         $ap = new Actividadpregunta();
         $ap->actividad_id = $a;
         $ap->pregunta_id = $p;
@@ -225,7 +234,8 @@ class ActividadController extends Controller
     }
 
     //delete pregunta
-    public function deletepregunta($gmd, $py) {
+    public function deletepregunta($gmd, $py)
+    {
         $ap = Actividadpregunta::find($py);
         if ($ap->delete()) {
             $this->setAuditoria('ELIMINAR', 'QUITAR PREGUNTA DE ACTIVIDAD ACADEMICA. DATOS RETIRADOS: ', $ap);
@@ -238,7 +248,8 @@ class ActividadController extends Controller
     }
 
     //obtiene los temas de una ctunidad_id
-    public function getTemas($ctunidad_id) {
+    public function getTemas($ctunidad_id)
+    {
         $ctunid = Ctunidad::findOrFail($ctunidad_id);
         if ($ctunid == null)
             return "null";
@@ -259,11 +270,14 @@ class ActividadController extends Controller
      * @param $ctunidad_id
      *
      */
-    public function getAprendizajes($ctunidad_id) {
+    public function getAprendizajes($ctunidad_id)
+    {
         $query = DB::table('ctunidadestandars')
             ->join('ctunidadestandaraprendizajes', 'ctunidadestandaraprendizajes.ctunidadestandar_id', '=', 'ctunidadestandars.id')
-            ->select('ctunidadestandaraprendizajes.id',
-                DB::raw("(SELECT aprendizajes.logro FROM aprendizajes WHERE aprendizajes.id = ctunidadestandaraprendizajes.aprendizaje_id) AS logro"))
+            ->select(
+                'ctunidadestandaraprendizajes.id',
+                DB::raw("(SELECT aprendizajes.logro FROM aprendizajes WHERE aprendizajes.id = ctunidadestandaraprendizajes.aprendizaje_id) AS logro")
+            )
             ->where('ctunidadestandars.ctunidad_id', $ctunidad_id)->orderBy('logro')->get();
         if (count($query) <= 0)
             return "null";
